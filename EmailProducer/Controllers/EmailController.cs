@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace EmailProducer.Controllers
+namespace EmailMicroService.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -17,6 +17,8 @@ namespace EmailProducer.Controllers
         public void Send([FromBody] EmailMessage EmailMessage)
         {
         }
+
+
 
 
     }

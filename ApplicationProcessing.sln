@@ -9,7 +9,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logger.Serilog", "Logger.Se
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{46CF101D-4EF8-4F84-BBFA-A79F24AF7789}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmailProducer", "EmailProducer\EmailProducer.csproj", "{BC55432B-7C94-4A93-9534-FF5554DDA01C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmailMicroService", "EmailProducer\EmailMicroService.csproj", "{BC55432B-7C94-4A93-9534-FF5554DDA01C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoggerMicroService", "LoggerMicroService\LoggerMicroService.csproj", "{37422FEA-0BA5-48C9-977A-205872517137}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{BC55432B-7C94-4A93-9534-FF5554DDA01C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BC55432B-7C94-4A93-9534-FF5554DDA01C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BC55432B-7C94-4A93-9534-FF5554DDA01C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37422FEA-0BA5-48C9-977A-205872517137}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37422FEA-0BA5-48C9-977A-205872517137}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37422FEA-0BA5-48C9-977A-205872517137}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37422FEA-0BA5-48C9-977A-205872517137}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

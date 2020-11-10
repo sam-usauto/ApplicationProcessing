@@ -1,6 +1,6 @@
 using System;
 
-namespace EmailProducer
+namespace LoggerMicroService
 {
     public class WeatherForecast
     {
