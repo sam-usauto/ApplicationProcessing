@@ -1,161 +1,100 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
+using Common.DTOs.Loggers.Serilog;
 using Serilog;
+using Serilog.Events;
 
 namespace LoggerMicroService.Helpers.Loggers.Serilog
 {
-    public class CommonLogger
+    public static class CommonLogger
     {
         private static ILogger _perfLogger;
         private static ILogger _usageLogger;
         private static ILogger _errorLogger;
         private static ILogger _diagnosticLogger;
 
-        public static LoggerFileLocation _loggerFileLocation;   // Location for logger files
-        public static bool _enableDiagnostics;                  // write diagnostics to log
-        public static LogDefaultWhere _logDefaultWhere;          // default values for the log WHERE section
+        public static void SetLoggers(SerilogConfig serilogConfig)
+        {
+            _perfLogger = new LoggerConfiguration()
+                .WriteTo.File(path: serilogConfig.FileLocation.PerfLoggerLocation)
+                //.WriteTo.File(path: Environment.GetEnvironmentVariable("LOGFILE_PERF"))
+                .CreateLogger();
+
+            _usageLogger = new LoggerConfiguration()
+                .WriteTo.File(path: serilogConfig.FileLocation.UsageLoggerLocation)
+                //.WriteTo.File(path: Environment.GetEnvironmentVariable("LOGFILE_USAGE"))
+                .CreateLogger();
+
+            _errorLogger = new LoggerConfiguration()
+                .WriteTo.File(path: serilogConfig.FileLocation.ErrorLoggerLocation)
+                //.WriteTo.File(path: Environment.GetEnvironmentVariable("LOGFILE_ERROR"))
+                .CreateLogger();
+
+            _diagnosticLogger = new LoggerConfiguration()
+                .WriteTo.File(path: serilogConfig.FileLocation.DiagnosticLoggerLocation)
+                //.WriteTo.File(path: Environment.GetEnvironmentVariable("LOGFILE_DIAG"))
+                .CreateLogger();
+        }
 
         static CommonLogger()
         {
-        }
+            //_perfLogger = new LoggerConfiguration()
+            //    .WriteTo.File(path: Environment.GetEnvironmentVariable("LOGFILE_PERF"))
+            //    .CreateLogger();
 
-        /// <summary>
-        /// SetLogger must be called one time to set the loggers and the log file locations
-        /// </summary>
-        /// <param name="_loggerFileLocation"></param>
-        public static void SetLoggers(LoggerFileLocation LoggerFileLocation, bool EnableDiagnostics, LogDefaultWhere LogDefaultWhere)
-        {
-            try
-            {
-                _enableDiagnostics = EnableDiagnostics;
+            //_usageLogger = new LoggerConfiguration()
+            //    .WriteTo.File(path: Environment.GetEnvironmentVariable("LOGFILE_USAGE"))
+            //    .CreateLogger();
 
-                _logDefaultWhere = LogDefaultWhere;
+            //_errorLogger = new LoggerConfiguration()
+            //    .WriteTo.File(path: Environment.GetEnvironmentVariable("LOGFILE_ERROR"))
+            //    .CreateLogger();
 
-                _perfLogger = new LoggerConfiguration()
-                    // .WriteTo.File(path: LoggerFileLocation.PerfLoggerLocation)
-                    .WriteTo.RollingFile(LoggerFileLocation.PerfLoggerLocation, retainedFileCountLimit: null)
-                    .CreateLogger();
-
-                _usageLogger = new LoggerConfiguration()
-                    // .WriteTo.File(path: LoggerFileLocation.UsageLoggerLocation)
-                    .WriteTo.RollingFile(LoggerFileLocation.UsageLoggerLocation, retainedFileCountLimit: null)
-                    .CreateLogger();
-
-                _errorLogger = new LoggerConfiguration()
-                    // .WriteTo.File(path: LoggerFileLocation.ErrorLoggerLocation)
-                    .WriteTo.RollingFile(LoggerFileLocation.ErrorLoggerLocation, retainedFileCountLimit: null)
-                    .CreateLogger();
-
-                _diagnosticLogger = new LoggerConfiguration()
-                    // .WriteTo.File(path: LoggerFileLocation.DiagnosticLoggerLocation)
-                    .WriteTo.RollingFile(LoggerFileLocation.DiagnosticLoggerLocation, retainedFileCountLimit: null)
-                    .CreateLogger();
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        public static void WriteDebugInfoUsage(string msg, Exception ex, Dictionary<string, object> additionalInfo)
-        {
-            var infoToLog = new LogDetail();
-            infoToLog.Message = msg;
-            if (additionalInfo != null)
-            {
-                infoToLog.AdditionalInfo = additionalInfo;
-            }
-            if (ex != null)
-            {
-                infoToLog.Exception = ex;
-            }
-            _usageLogger.Write(LogEventLevel.Information, "{@FlogDetail}", infoToLog);
-        }
-
-        public static void WriteErrorInfoUsage(string msg, Exception ex, Dictionary<string, object> additionalInfo)
-        {
-            var infoToLog = new LogDetail();
-            infoToLog.Message = msg;
-            if (additionalInfo != null)
-            {
-                infoToLog.AdditionalInfo = additionalInfo;
-            }
-            if (ex != null)
-            {
-                infoToLog.Exception = ex;
-            }
-            _errorLogger.Write(LogEventLevel.Information, "{@FlogDetail}", infoToLog);
-            WriteErrorLogSpacerUsage();
-        }
-
-        // write empty log.. used as visualized spacer between logs
-        public static void WriteSeeErrorLogUsage()
-        {
-            var infoToLog = new LogDetail();
-            infoToLog.Message = "See Error log for details";
-            _usageLogger.Write(LogEventLevel.Information, "{@FlogDetail}", infoToLog);
-        }
-
-        // write empty log.. used as visualized spacer between logs
-        public static void WriteSpacerUsage()
-        {
-            var infoToLog = new LogDetail();
-            infoToLog.Message = "                                                                                             ";
-            _usageLogger.Write(LogEventLevel.Information, "{@FlogDetail}", infoToLog);
-        }
-
-        // write empty log.. used as visualized spacer between logs
-        public static void WriteAbundantSpacerUsage(bool Saved, string msg = "( No enough information to save )")
-        {
-            var infoToLog = new LogDetail();
-            if (Saved)
-            {
-                infoToLog.Message = "---  C O M P L E T E D  ---";
-            }
-            else
-            {
-                infoToLog.Message = $"---  F A I L E D   {msg}  -----------";
-            }
-            _usageLogger.Write(LogEventLevel.Information, "{@FlogDetail}", infoToLog);
-
-            WriteSpacerUsage();
-
+            //_diagnosticLogger = new LoggerConfiguration()
+            //    .WriteTo.File(path: Environment.GetEnvironmentVariable("LOGFILE_DIAG"))
+            //    .CreateLogger();
         }
 
         public static void WritePerf(LogDetail infoToLog)
         {
             _perfLogger.Write(LogEventLevel.Information, "{@FlogDetail}", infoToLog);
         }
+
         public static void WriteUsage(LogDetail infoToLog)
         {
             _usageLogger.Write(LogEventLevel.Information, "{@FlogDetail}", infoToLog);
         }
+
         public static void WriteError(LogDetail infoToLog)
         {
             if (infoToLog.Exception != null)
             {
                 var procName = FindProcName(infoToLog.Exception);
-                infoToLog.Location = string.IsNullOrEmpty(procName) ? infoToLog.Location : procName;
+                infoToLog.Location = string.IsNullOrEmpty(procName)
+                    ? infoToLog.Location
+                    : procName;
                 infoToLog.Message = GetMessageFromException(infoToLog.Exception);
             }
-            _errorLogger.Write(LogEventLevel.Information, "{@FlogDetail}", infoToLog);
-            WriteErrorLogSpacerUsage();
-        }
-
-        // write empty log.. used as visualized spacer between logs
-        public static void WriteErrorLogSpacerUsage()
-        {
-            var infoToLog = new LogDetail();
-            infoToLog.Message = "                                                                                             ";
             _errorLogger.Write(LogEventLevel.Information, "{@FlogDetail}", infoToLog);
         }
 
         public static void WriteDiagnostic(LogDetail infoToLog)
         {
-            if (!_enableDiagnostics)
+            var writeDiagnostics =
+                Convert.ToBoolean(Environment.GetEnvironmentVariable("DIAGNOSTICS_ON"));
+            if (!writeDiagnostics)
                 return;
 
             _diagnosticLogger.Write(LogEventLevel.Information, "{@FlogDetail}", infoToLog);
+        }
+
+        private static string GetMessageFromException(Exception ex)
+        {
+            if (ex.InnerException != null)
+                return GetMessageFromException(ex.InnerException);
+
+            return ex.Message;
         }
 
         private static string FindProcName(Exception ex)
@@ -177,14 +116,6 @@ namespace LoggerMicroService.Helpers.Loggers.Serilog
                 return FindProcName(ex.InnerException);
 
             return null;
-        }
-
-        private static string GetMessageFromException(Exception ex)
-        {
-            if (ex.InnerException != null)
-                return GetMessageFromException(ex.InnerException);
-
-            return ex.Message;
         }
     }
 }

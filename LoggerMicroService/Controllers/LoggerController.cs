@@ -1,47 +1,46 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
+using Common.DTOs.Loggers.Serilog;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace LoggerMicroService.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("[controller]")]
     public class LoggerController : ControllerBase
     {
-        // GET: api/<LoggerController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        //private readonly IEmailService _emailService;
+        private readonly SerilogConfig _serilogConfig;
+
+        public LoggerController(
+                    //ITrustScienceService trustScienceService,
+                    SerilogConfig config
+                    )
         {
-            return new string[] { "value1", "value2" };
+            //_trustScienceService = trustScienceService;
+            _serilogConfig = config;
         }
 
-        // GET api/<LoggerController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/<LoggerController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public HttpResponseMessage Save([FromBody] LogDetail logDetail)
         {
+
+            return new HttpResponseMessage(HttpStatusCode.OK);
         }
 
-        // PUT api/<LoggerController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpGet]
+        [Route("Config")]
+        public IActionResult Config()
         {
+            // TODO - mask the connection string and change the "//" to "/" in the locations
+            return Ok(_serilogConfig);
         }
 
-        // DELETE api/<LoggerController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
     }
 }
