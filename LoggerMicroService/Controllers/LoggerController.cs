@@ -42,5 +42,11 @@ namespace LoggerMicroService.Controllers
             return Ok(_serilogConfig);
         }
 
+        [HttpGet("version")]
+        public string Version()
+        {
+            return "Version 1.0.0";
+        }
+
     }
 }

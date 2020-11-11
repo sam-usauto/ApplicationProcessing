@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ApplicationWorker.DTOs
+namespace Common.DTOs.Application
 {
     public class SaveShortAppWrapper
     {

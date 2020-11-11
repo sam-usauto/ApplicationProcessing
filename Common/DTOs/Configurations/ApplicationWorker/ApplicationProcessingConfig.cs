@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Common.DTOs.commo;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ApplicationWorker.DTOs.Configuration
+namespace Common.DTOs.Configurations.ApplicationWorker
 {
     public class ApplicationProcessingConfig
     {

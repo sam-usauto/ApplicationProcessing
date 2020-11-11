@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace ApplicationWorker.DTOs
+namespace Common.DTOs.Application
 {
     public class ShortApp
     {

@@ -1,9 +1,6 @@
-﻿using ApplicationWorker.DTOs;
-using Common.DTOs;
-using System;
+﻿using Common.DTOs;
+using Common.DTOs.Application;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ApplicationWorker.Helper
 {

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace LoggerMicroService
 {
+    [Serializable]
     public class SerilogConfig
     {
         public bool IsProduction { get; set; }
@@ -20,6 +21,8 @@ namespace LoggerMicroService
         public SqlConnectionStrings ConnectionStringsUAT { get; set; }
 
         public SqlConnectionStrings ConnectionStringsPROD { get; set; }
+
+
 
     }
 }
