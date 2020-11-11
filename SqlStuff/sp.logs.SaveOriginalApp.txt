@@ -1,0 +1,31 @@
+﻿SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =================================================================================================
+-- Author:		Sam Aloni
+-- Create date: 11-11-2020
+-- Description:	Save user original application
+-- EXEC [logs].[SaveOriginalApp] 'test #1';
+-- =================================================================================================
+ALTER PROCEDURE [logs].[SaveOriginalApp]
+		@OriginalApp varchar(max)
+
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+	INSERT INTO [logs].[ClientApplication]
+		 (
+			    [OriginalApp]
+		 )
+		 OUTPUT Inserted.Id
+	VALUES
+		 (
+		 		@OriginalApp
+		 )
+
+		
+END

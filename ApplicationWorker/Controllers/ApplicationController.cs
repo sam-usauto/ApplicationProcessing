@@ -5,20 +5,39 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using ApplicationWorker.Helper;
+using ApplicationWorkerDataLayer.Interfaces;
+using ApplicationWorkerDataLayer.Repositories;
 using Common.DTOs.Application;
+using Common.DTOs.Configurations.ApplicationWorker;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace ApplicationWorker.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("[controller]")]
     public class ApplicationController : ControllerBase
     {
+
+        private readonly ApplicationProcessingConfig _config;
+        private readonly IApplicationRepository _applicationRepository;
+
+        private int _applicationLogInfoID = -1;
+
+
+        public ApplicationController(ApplicationProcessingConfig config, IApplicationRepository applicationRepository)
+        {
+            _config = config;
+            _applicationRepository = applicationRepository;
+        }
+
         [HttpPost]
+        [Route("save")]
         public HttpResponseMessage Save([FromBody] SaveShortAppWrapper application)
         {
+            var _applicationLogInfoID = 
+
             var appValidator = new AppValidator();
             var validationErrorList = appValidator.ValidateApp(application);
             if(validationErrorList.Count > 0)
@@ -27,6 +46,20 @@ namespace ApplicationWorker.Controllers
             }
 
             return new HttpResponseMessage(HttpStatusCode.OK);
+        }
+
+        [HttpGet]
+        [Route("config")]
+        public IActionResult Config()
+        {
+            // TODO - mask the connection string and change the "//" to "/" in the locations
+            return Ok(_config);
+        }
+
+        [HttpGet("version")]
+        public string Version()
+        {
+            return "Version 1.0.0";
         }
 
 

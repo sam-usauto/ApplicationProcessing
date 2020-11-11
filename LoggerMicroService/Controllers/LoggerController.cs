@@ -35,7 +35,7 @@ namespace LoggerMicroService.Controllers
         }
 
         [HttpGet]
-        [Route("Config")]
+        [Route("config")]
         public IActionResult Config()
         {
             // TODO - mask the connection string and change the "//" to "/" in the locations

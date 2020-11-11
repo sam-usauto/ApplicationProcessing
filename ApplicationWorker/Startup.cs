@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ApplicationWorkerDataLayer.Interfaces;
+using ApplicationWorkerDataLayer.Repositories;
 using Common.DTOs.Configurations.ApplicationWorker;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -36,7 +38,8 @@ namespace ApplicationWorker
 
             services.AddSingleton(config);
 
-            //services.AddTransient<ITrustScienceService, TrustScienceService>();     //add TrustScienceService to services collection
+            services.AddTransient<IApplicationRepository, ApplicationRepository>();     //add TrustScienceService to services collection
+
 
             services.AddControllers();
         }

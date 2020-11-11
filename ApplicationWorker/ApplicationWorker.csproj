@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ApplicationDataLayer\ApplicationWorkerDataLayer.csproj" />
     <ProjectReference Include="..\Common\Common.csproj" />
     <ProjectReference Include="..\Logger.Serilog\Logger.Serilog.csproj" />
   </ItemGroup>

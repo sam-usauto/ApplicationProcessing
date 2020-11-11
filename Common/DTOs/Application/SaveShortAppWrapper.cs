@@ -8,7 +8,6 @@ namespace Common.DTOs.Application
 {
     public class SaveShortAppWrapper
     {
-        [Required]
         public ShortApp Data { get; set; }
 
         public string GRecaptchaResponse { get; set; }

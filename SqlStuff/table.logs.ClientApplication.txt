@@ -1,0 +1,24 @@
+﻿
+
+/****** Object:  Table [dbo].[ClientApplication]    Script Date: 11/11/2020 12:57:11 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+-- DROP TABLE [logs].[ClientApplication]
+
+CREATE TABLE [logs].[ClientApplication](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[OriginalApp] [varchar](max) NULL,
+	[CreatedOn] [datetime] NOT NULL,
+	[ModifiedOn] [datetime] NOT NULL
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+ALTER TABLE [logs].[ClientApplication] ADD  CONSTRAINT [DF_ClientApplication_CreatedOn]  DEFAULT (getdate()) FOR [CreatedOn]
+GO
+
+ALTER TABLE [logs].[ClientApplication] ADD  CONSTRAINT [DF_ClientApplication_ModifiedOn]  DEFAULT (getdate()) FOR [ModifiedOn]
+GO
