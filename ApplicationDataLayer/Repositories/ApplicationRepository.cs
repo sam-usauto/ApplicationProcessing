@@ -35,17 +35,14 @@ namespace ApplicationWorkerDataLayer.Repositories
             }
         }
 
-        public async Task<int> SaveClientOriginalApplication(SaveShortAppWrapper saveShortAppWrapper)
+        public async Task<int> SaveClientOriginalApplication(string appJson)
         {
             try
             {
-                // conver object to string
-                var app = "";
-
                 using (var conn = new SqlConnection(_scoringDbConn))
                 {
                     var queryParameters = new DynamicParameters();
-                    queryParameters.Add("@OriginalApp", app);
+                    queryParameters.Add("@OriginalApp", appJson);
 
                     var insertedId = await conn.QueryFirstAsync<int>(
                                  "[logs].[SaveOriginalApp]",
@@ -57,7 +54,7 @@ namespace ApplicationWorkerDataLayer.Repositories
             }
             catch (Exception ex)
             {
-                return await Task.FromResult(new SaveCreateFullScoringToTableResp());
+                throw ex;
             }
         }
     }

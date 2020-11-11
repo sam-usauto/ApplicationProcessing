@@ -6,7 +6,7 @@ namespace ApplicationWorkerDataLayer.Interfaces
 
     public interface IApplicationRepository
     {
-        Task<int> SaveClientOriginalApplication(SaveShortAppWrapper saveShortAppWrapper);
+        Task<int> SaveClientOriginalApplication(string appJson);
         //Task<HttpGeneralResponse> CreateFullScoringRequest(TrustScienceBatchItem trustScienceBatchItem);
         //Task<HttpGeneralResponse> GetScoringReport(string id);
         //Task<SaveCreateFullScoringToTableResp> SaveFullScroingInfo(TrustScienceScore trustScienceScore);

@@ -36,7 +36,7 @@ namespace ApplicationWorker.Controllers
         [Route("save")]
         public HttpResponseMessage Save([FromBody] SaveShortAppWrapper application)
         {
-            var _applicationLogInfoID = 
+            //var _applicationLogInfoID = 
 
             var appValidator = new AppValidator();
             var validationErrorList = appValidator.ValidateApp(application);
