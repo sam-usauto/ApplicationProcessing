@@ -9,7 +9,9 @@ using ApplicationWorkerDataLayer.Interfaces;
 using ApplicationWorkerDataLayer.Repositories;
 using Common.DTOs.Application;
 using Common.DTOs.Configurations.ApplicationWorker;
+using Common.Helper;
 using Microsoft.AspNetCore.Mvc;
+
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -36,16 +38,25 @@ namespace ApplicationWorker.Controllers
         [Route("save")]
         public HttpResponseMessage Save([FromBody] SaveShortAppWrapper application)
         {
-            //var _applicationLogInfoID = 
-
-            var appValidator = new AppValidator();
-            var validationErrorList = appValidator.ValidateApp(application);
-            if(validationErrorList.Count > 0)
+            try
             {
-                return new HttpResponseMessage(HttpStatusCode.BadRequest);
-            }
 
-            return new HttpResponseMessage(HttpStatusCode.OK);
+                var json = JsonConvertion.ObjectToJson<SaveShortAppWrapper>(application, Indented);
+                //var _applicationLogInfoID = 
+
+                var appValidator = new AppValidator();
+                var validationErrorList = appValidator.ValidateApp(application);
+                if (validationErrorList.Count > 0)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.BadRequest);
+                }
+
+                return new HttpResponseMessage(HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         [HttpGet]
