@@ -1,0 +1,13 @@
+﻿
+
+SELECT TOP (100) [Id]
+      ,[FirstName]
+      ,[LastName]
+      ,[PhoneNumber]
+      ,[Email]
+      ,[SSN]
+      ,[OriginalApp]
+      ,[CreatedOn]
+      ,[ModifiedOn]
+  FROM [ScoringDBProd_Dev_Sam].[logs].[ClientApplication]
+  ORDER BY ID DESC;

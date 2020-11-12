@@ -18,5 +18,9 @@ namespace Common.DTOs.Configurations.ApplicationWorker
 
         public SqlConnectionStrings ConnectionStringsPROD { get; set; }
 
+        public string SsnDecryptUrl { get; set; }
+
+        public string SsnEcryptUrl { get; set; }
+
     }
 }

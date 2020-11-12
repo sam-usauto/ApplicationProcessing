@@ -4,11 +4,16 @@ SET QUOTED_IDENTIFIER ON
 GO
 -- =================================================================================================
 -- Author:		Sam Aloni
--- Create date: 11-11-2020
+-- Create date: 11-12-2020
 -- Description:	Save user original application
 -- EXEC [logs].[SaveOriginalApp] 'test #1';
 -- =================================================================================================
 ALTER PROCEDURE [logs].[SaveOriginalApp]
+		@FirstName varchar(50),
+		@LastName varchar(50),
+		@PhoneNumber varchar(50),
+		@Email varchar(50),
+		@Last4Ssn varchar(50),
 		@OriginalApp varchar(max)
 
 AS
@@ -19,12 +24,22 @@ BEGIN
 
 	INSERT INTO [logs].[ClientApplication]
 		 (
-			    [OriginalApp]
+			[FirstName]
+           ,[LastName]
+           ,[PhoneNumber]
+           ,[Email]
+           ,[Last4Ssn]
+           ,[OriginalApp]
 		 )
 		 OUTPUT Inserted.Id
 	VALUES
 		 (
-		 		@OriginalApp
+			@FirstName
+           ,@LastName
+           ,@PhoneNumber
+           ,@Email
+           ,@Last4Ssn
+           ,@OriginalApp
 		 )
 
 		

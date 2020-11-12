@@ -16,7 +16,7 @@ namespace ApplicationWorkerDataLayer.Repositories
     {
         public ApplicationProcessingConfig _config;         // ApplicationWorker configuration object
         bool _production = false;                           // Is Production?... read from appSettings.json
-        string _scoringDbConn = string.Empty;                  // SQL connection string...  Depended on IsProduction setting
+        string _scoringDbConn = string.Empty;               // SQL connection string...  Depended on IsProduction setting
         
 
         public ApplicationRepository(ApplicationProcessingConfig config)
@@ -35,13 +35,46 @@ namespace ApplicationWorkerDataLayer.Repositories
             }
         }
 
-        public async Task<int> SaveClientOriginalApplication(string appJson)
+        public async Task<int> SaveApplicationToDB(ShortApp application)
         {
             try
             {
                 using (var conn = new SqlConnection(_scoringDbConn))
                 {
                     var queryParameters = new DynamicParameters();
+                    //queryParameters.Add("@FirstName", firstName);
+                    //queryParameters.Add("@LastName", lastName);
+                    //queryParameters.Add("@PhoneNumber", phoneNumber);
+                    //queryParameters.Add("@Email", email);
+                    //queryParameters.Add("@Ssn", ssn);
+                    queryParameters.Add("@OriginalApp", 1);
+
+                    var insertedId = await conn.QueryFirstAsync<int>(
+                                 "[logs].[SaveOriginalApp]",
+                                 queryParameters,
+                                 commandType: CommandType.StoredProcedure);
+
+                    return await Task.FromResult(insertedId);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<int> SaveClientOriginalApplication(string firstName, string lastName, string phoneNumber, string email, string ssn, string appJson)
+        {
+            try
+            {
+                using (var conn = new SqlConnection(_scoringDbConn))
+                {
+                    var queryParameters = new DynamicParameters();
+                    queryParameters.Add("@FirstName", firstName);
+                    queryParameters.Add("@LastName", lastName);
+                    queryParameters.Add("@PhoneNumber", phoneNumber);
+                    queryParameters.Add("@Email", email);
+                    queryParameters.Add("@Last4Ssn", ssn);
                     queryParameters.Add("@OriginalApp", appJson);
 
                     var insertedId = await conn.QueryFirstAsync<int>(

@@ -38,6 +38,7 @@
   <ItemGroup>
     <Content Include="table.logs.ClientApplication.txt" />
     <Content Include="sp.logs.SaveOriginalApp.txt" />
+    <Content Include="TestingCommands.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

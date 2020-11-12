@@ -36,13 +36,32 @@ namespace ApplicationWorker.Controllers
 
         [HttpPost]
         [Route("save")]
-        public HttpResponseMessage Save([FromBody] SaveShortAppWrapper application)
+        public async Task<HttpResponseMessage> Save([FromBody] SaveShortAppWrapper application)
         {
             try
             {
+                application.Data.ClientID = GetClientIp();
+                // TODO - need to encrypt SSN
+                // mask the SSN for the Json
+                var ssnPlain = application.Data.Ssn;
 
-                var json = JsonConvertion.ObjectToJson<SaveShortAppWrapper>(application, Indented);
-                //var _applicationLogInfoID = 
+                // call the SSN decryption
+                if (String.IsNullOrEmpty(item.SSN) == false)
+                {
+                    var ssnResp = await DecryptSsn(item.SSN);
+                    item.SSN = ssnResp.ResponseData;
+                }
+
+                application.Data.Ssn = SsnNumberService.EncriptSsn(ssnPlain);
+                var json = JsonConvertion.ObjectToJson<SaveShortAppWrapper>(application);
+                _applicationLogInfoID = await _applicationRepository.SaveClientOriginalApplication(
+                                    application.Data.FirstName, 
+                                    application.Data.LastName,
+                                    application.Data.PhoneNumber,
+                                    application.Data.Email,
+                                    SsnNumberService.LastFourDigits(ssnPlain),
+                                    json);
+
 
                 var appValidator = new AppValidator();
                 var validationErrorList = appValidator.ValidateApp(application);
@@ -50,6 +69,8 @@ namespace ApplicationWorker.Controllers
                 {
                     return new HttpResponseMessage(HttpStatusCode.BadRequest);
                 }
+
+                //await _applicationRepository.SaveApplicationToDB(application.Data);
 
                 return new HttpResponseMessage(HttpStatusCode.OK);
             }
@@ -72,6 +93,14 @@ namespace ApplicationWorker.Controllers
         {
             return "Version 1.0.0";
         }
+
+
+        private string GetClientIp()
+        {
+            var remoteIpAddress = HttpContext.Connection.RemoteIpAddress;
+            return remoteIpAddress.ToString();
+        }
+
 
 
         // GET: api/<ApplicationController>

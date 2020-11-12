@@ -11,6 +11,11 @@ GO
 
 CREATE TABLE [logs].[ClientApplication](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[FirstName] [varchar](50) NULL,
+	[LastName] [varchar](50) NULL,
+	[PhoneNumber] [varchar](max) NULL,
+	[Email] [varchar](max) NULL,
+	[Last4Ssn] [char](4) NULL,
 	[OriginalApp] [varchar](max) NULL,
 	[CreatedOn] [datetime] NOT NULL,
 	[ModifiedOn] [datetime] NOT NULL

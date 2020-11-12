@@ -153,6 +153,10 @@ namespace Common.DTOs.Application
 
         public bool? CurrentlyInBankruptcy { get; set; }
 
+        public string ClientID { get; set; }
+
+        // public string SsnEncrypted { get; set; }
+
         #endregion Public
 
     }
