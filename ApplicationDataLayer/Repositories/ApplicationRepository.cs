@@ -35,6 +35,7 @@ namespace ApplicationWorkerDataLayer.Repositories
             }
         }
 
+        // Save init application to related tables
         public async Task<int> SaveApplicationToDB(ShortApp application)
         {
             try
@@ -42,19 +43,41 @@ namespace ApplicationWorkerDataLayer.Repositories
                 using (var conn = new SqlConnection(_scoringDbConn))
                 {
                     var queryParameters = new DynamicParameters();
-                    //queryParameters.Add("@FirstName", firstName);
-                    //queryParameters.Add("@LastName", lastName);
-                    //queryParameters.Add("@PhoneNumber", phoneNumber);
-                    //queryParameters.Add("@Email", email);
-                    //queryParameters.Add("@Ssn", ssn);
-                    queryParameters.Add("@OriginalApp", 1);
 
-                    var insertedId = await conn.QueryFirstAsync<int>(
-                                 "[logs].[SaveOriginalApp]",
+                    queryParameters.Add("@FirstName", application.FirstName);
+                    queryParameters.Add("@MiddleName", application.MiddleName);
+                    queryParameters.Add("@LastName", application.LastName);
+                    queryParameters.Add("@HomePhone", application.PhoneNumber);
+                    queryParameters.Add("@PhoneType", application.PhoneType);
+                    queryParameters.Add("@Email", application.Email);
+                    queryParameters.Add("@HouseNumber", application.HouseNumber);
+                    queryParameters.Add("@StreetName", application.StreetName);
+                    queryParameters.Add("@StreetTypeId", application.StreetTypeId);
+                    queryParameters.Add("@City", application.City);
+                    queryParameters.Add("@Zip", application.Zip);
+                    queryParameters.Add("@StateId", application.StateId);
+                    queryParameters.Add("@HouseTypeId", application.HouseTypeId);
+                    queryParameters.Add("@Referrer", application.Referrer);
+                    queryParameters.Add("@TimeAtResidenceYears", application.TimeAtResidenceYears);
+                    queryParameters.Add("@TimeAtResidenceMonths", application.TimeAtResidenceMonths);
+                    queryParameters.Add("@TimeAtJobYears", application.TimeAtJobYears);
+                    queryParameters.Add("@TimeAtJobMonths", application.TimeAtJobMonths);
+                    queryParameters.Add("@NetPeriodPaycheck", application.NetPeriodPaycheck);
+                    queryParameters.Add("@PaymentTypeId", application.PaymentTypeId);
+                    queryParameters.Add("@OtherIncomePayPeriodId", application.OtherIncomePayPeriodId);
+                    queryParameters.Add("@ActiveOrFormerMilitary", application.ActiveOrFormerMilitary);
+                    queryParameters.Add("@MilitaryChoise", application.MilitaryChoise);
+                    queryParameters.Add("@Ssn", application.Ssn);
+                    queryParameters.Add("@CurrentlyInBankruptcy", application.CurrentlyInBankruptcy);
+                    queryParameters.Add("@ClientIP", application.ClientIP);
+                    queryParameters.Add("@Last4Ssn", application.Last4Ssn);
+
+                    var returnVal = await conn.QueryFirstAsync<int>(
+                                 "[app].[SaveInitApp]",
                                  queryParameters,
                                  commandType: CommandType.StoredProcedure);
 
-                    return await Task.FromResult(insertedId);
+                    return await Task.FromResult(returnVal);
                 }
             }
             catch (Exception ex)
@@ -63,6 +86,7 @@ namespace ApplicationWorkerDataLayer.Repositories
             }
         }
 
+        // Save original application to log table
         public async Task<int> SaveClientOriginalApplication(string firstName, string lastName, string phoneNumber, string email, string ssn, string appJson)
         {
             try

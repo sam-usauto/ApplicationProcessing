@@ -1,0 +1,178 @@
+﻿/**********************************************************************************/
+/*  Create new schema
+/**********************************************************************************/
+
+CREATE SCHEMA customer_services;
+
+
+/**********************************************************************************/
+/*  Try Catch
+/**********************************************************************************/
+
+CREATE PROCEDURE ------
+AS 
+BEGIN TRY
+    
+    SET NOCOUNT ON;
+
+    DECLARE @due_dt DATETIME;
+    SELECT  @due_dt = DATEADD(day, 20, @statement_dt);
+    DECLARE @statement_amt MONEY;
+    DECLARE @ROWCOUNT INT;
+
+    BEGIN TRANSACTION
+
+    SELECT  * .......
+	
+    IF @statement_amt = 0 
+        BEGIN
+            RAISERROR('Statement amount is 0.', 16,1);
+        END
+
+    INSERT  [dbo].[statement] ......
+
+
+    UPDATE  [dbo].[charge]  ....
+
+
+    COMMIT TRANSACTION;
+END TRY
+BEGIN CATCH  
+
+    IF @@TRANCOUNT <> 0 
+        BEGIN
+            ROLLBACK TRANSACTION
+        END;
+    
+    RAISERROR ('Stored procedure "generatestatement_nextgen" failed',16, -1);
+
+END CATCH      
+
+/**********************************************************************************/
+/*  Alternative to BEGIN CATCH  (07 CATCH block error information)
+/**********************************************************************************/
+BEGIN TRY
+    
+    SET NOCOUNT ON;
+    SET XACT_ABORT ON;
+
+    BEGIN TRANSACTION
+
+    .......................
+
+    COMMIT TRANSACTION;
+END TRY
+BEGIN CATCH  
+
+    IF @@TRANCOUNT <> 0 
+        ROLLBACK TRANSACTION;
+    
+    SELECT  ERROR_LINE() AS [Error_Line],
+            ERROR_MESSAGE() AS [Error_Message],
+            ERROR_NUMBER() AS [Error_Number],
+            ERROR_SEVERITY() AS [Error_Severity],
+            ERROR_PROCEDURE() AS [Error_Procedure];
+
+END CATCH 
+
+/**********************************************************************************/
+/*  Find OBJECT
+/**********************************************************************************/
+
+IF OBJECT_ID('[dbo].[generatestatement_nextgen]') IS NOT NULL 
+    BEGIN
+        DROP PROCEDURE [dbo].[generatestatement_nextgen];
+    END
+GO
+
+
+/**********************************************************************************/
+/*  SET IDENTITY_INSERT
+/**********************************************************************************/
+
+    SET IDENTITY_INSERT [dbo].[category] ON;
+
+    INSERT  INTO [dbo].[category]
+            ([category_no],
+             [category_desc],
+             [category_code])
+    VALUES  (1,
+             'Travel',
+             '');
+
+    SET IDENTITY_INSERT [dbo].[category] OFF;
+
+/**********************************************************************************/
+/* #1  Best way to get identity of inserted row?
+/**********************************************************************************/
+
+-- type of this table's column must match the type of the
+-- identity column of the table you'll be inserting into
+declare @IdentityOutput table ( ID int )
+
+insert TableWithIdentity
+     ( ... )
+output inserted.IdentityColumnName into @IdentityOutput
+values
+     ( ... )
+
+select @IdentityValue = (select ID from @IdentityOutput)
+
+/**********************************************************************************/
+/*  Best way to get identity of inserted row?
+/**********************************************************************************/
+
+USE AdventureWorks2008R2;
+GO
+DECLARE @MyTableVar table( NewScrapReasonID smallint,
+                           Name varchar(50),
+                           ModifiedDate datetime);
+INSERT Production.ScrapReason
+    OUTPUT INSERTED.ScrapReasonID, INSERTED.Name, INSERTED.ModifiedDate
+        INTO @MyTableVar
+VALUES (N'Operator error', GETDATE());
+
+--Display the result set of the table variable.
+SELECT NewScrapReasonID, Name, ModifiedDate FROM @MyTableVar;
+--Display the result set of the table.
+SELECT ScrapReasonID, Name, ModifiedDate 
+FROM Production.ScrapReason;
+GO
+
+
+
+/**********************************************************************************/
+/*  Best way to get identity of inserted row?
+/**********************************************************************************/
+
+DECLARE @generated_keys table([Id] uniqueidentifier)
+
+INSERT INTO TurboEncabulators(StatorSlots)
+OUTPUT inserted.TurboEncabulatorID INTO @generated_keys
+VALUES('Malleable logarithmic casing');
+
+SELECT t.[TurboEncabulatorID ]
+FROM @generated_keys AS g 
+   JOIN dbo.TurboEncabulators AS t 
+   ON g.Id = t.TurboEncabulatorID 
+WHERE @@ROWCOUNT > 0
+
+
+/**********************************************************************************/
+/*  Best way to get identity of inserted row?
+/**********************************************************************************/
+
+SELECT CAST(scope_identity() AS int);
+
+
+/**********************************************************************************/
+/*  Create a stored procedure in the dev schema
+/**********************************************************************************/
+
+CREATE PROCEDURE dev.TestSchema AS
+    SET NOCOUNT ON
+
+        BEGIN
+        SELECT * FROM ordertest -- No schema specified here
+        END;
+GO

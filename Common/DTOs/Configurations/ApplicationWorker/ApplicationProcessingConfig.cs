@@ -20,7 +20,7 @@ namespace Common.DTOs.Configurations.ApplicationWorker
 
         public string SsnDecryptUrl { get; set; }
 
-        public string SsnEcryptUrl { get; set; }
+        public string SsnEncryptUrl { get; set; }
 
     }
 }

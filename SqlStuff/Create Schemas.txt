@@ -1,0 +1,13 @@
+﻿
+
+CREATE SCHEMA app;
+GO
+
+CREATE SCHEMA trustScience;
+GO
+
+CREATE SCHEMA pointPredictive;
+GO
+
+CREATE SCHEMA abandonedApp;
+GO

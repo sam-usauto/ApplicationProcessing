@@ -34,9 +34,12 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="sp.app.SaveInitApp" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="table.logs.ClientApplication.txt" />
+    <Content Include="Create Schemas.txt" />
+    <Content Include="Sql code.txt" />
+    <Content Include="table.Create.ShortApp.txt" />
     <Content Include="sp.logs.SaveOriginalApp.txt" />
     <Content Include="TestingCommands.txt" />
   </ItemGroup>

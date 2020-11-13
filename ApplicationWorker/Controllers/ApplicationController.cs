@@ -24,6 +24,7 @@ namespace ApplicationWorker.Controllers
 
         private readonly ApplicationProcessingConfig _config;
         private readonly IApplicationRepository _applicationRepository;
+        private readonly SsnNumberService _ssnNumberService;
 
         private int _applicationLogInfoID = -1;
 
@@ -32,6 +33,7 @@ namespace ApplicationWorker.Controllers
         {
             _config = config;
             _applicationRepository = applicationRepository;
+            _ssnNumberService = new SsnNumberService(_config);
         }
 
         [HttpPost]
@@ -40,26 +42,28 @@ namespace ApplicationWorker.Controllers
         {
             try
             {
-                application.Data.ClientID = GetClientIp();
+                application.Data.ClientIP = GetClientIP();
+                application.Data.Last4Ssn = GetLast4Ssn(application.Data.Ssn);
                 // TODO - need to encrypt SSN
                 // mask the SSN for the Json
                 var ssnPlain = application.Data.Ssn;
 
+                var encryptedSSN = "Error";
                 // call the SSN decryption
-                if (String.IsNullOrEmpty(item.SSN) == false)
+                if (String.IsNullOrEmpty(ssnPlain) == false)
                 {
-                    var ssnResp = await DecryptSsn(item.SSN);
-                    item.SSN = ssnResp.ResponseData;
+                    var ssnResp = await _ssnNumberService.EncryptSsn(ssnPlain);
+                    encryptedSSN = ssnResp.ResponseData;
                 }
 
-                application.Data.Ssn = SsnNumberService.EncriptSsn(ssnPlain);
+                application.Data.Ssn = encryptedSSN;
                 var json = JsonConvertion.ObjectToJson<SaveShortAppWrapper>(application);
                 _applicationLogInfoID = await _applicationRepository.SaveClientOriginalApplication(
                                     application.Data.FirstName, 
                                     application.Data.LastName,
                                     application.Data.PhoneNumber,
                                     application.Data.Email,
-                                    SsnNumberService.LastFourDigits(ssnPlain),
+                                    _ssnNumberService.LastFourDigits(ssnPlain),
                                     json);
 
 
@@ -70,7 +74,8 @@ namespace ApplicationWorker.Controllers
                     return new HttpResponseMessage(HttpStatusCode.BadRequest);
                 }
 
-                //await _applicationRepository.SaveApplicationToDB(application.Data);
+                //TO DO 
+                var result = await _applicationRepository.SaveApplicationToDB(application.Data);
 
                 return new HttpResponseMessage(HttpStatusCode.OK);
             }
@@ -94,8 +99,20 @@ namespace ApplicationWorker.Controllers
             return "Version 1.0.0";
         }
 
+        // get last 4 digit from SSN
+        private string GetLast4Ssn(string ssn)
+        {
+            ssn = ssn.Trim();
+            if(string.IsNullOrEmpty(ssn) || ssn.Length < 4)
+            {
+                return "Err";
+            }
+            ssn = ssn.Substring(ssn.Length - 4);
+            return ssn;
+        }
 
-        private string GetClientIp()
+        // the the Client IP address
+        private string GetClientIP()
         {
             var remoteIpAddress = HttpContext.Connection.RemoteIpAddress;
             return remoteIpAddress.ToString();
