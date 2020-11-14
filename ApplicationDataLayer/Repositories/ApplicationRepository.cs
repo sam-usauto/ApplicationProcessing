@@ -36,12 +36,15 @@ namespace ApplicationWorkerDataLayer.Repositories
         }
 
         // Save init application to related tables
-        public async Task<int> SaveApplicationToDB(ShortApp application)
+        public async Task<int> SaveApplicationToDB((ShortApp application, int logId) applicationAndLog)
         {
             try
             {
                 using (var conn = new SqlConnection(_scoringDbConn))
                 {
+                    var application = applicationAndLog.application;
+                    var logID = applicationAndLog.logId;
+
                     var queryParameters = new DynamicParameters();
 
                     queryParameters.Add("@FirstName", application.FirstName);
@@ -72,12 +75,15 @@ namespace ApplicationWorkerDataLayer.Repositories
                     queryParameters.Add("@ClientIP", application.ClientIP);
                     queryParameters.Add("@Last4Ssn", application.Last4Ssn);
 
-                    var returnVal = await conn.QueryFirstAsync<int>(
+                    // pass the log ID
+                    queryParameters.Add("@LogId", logID);
+
+                    (int CreditScoreAppId, int ApplicationId, int PayingCapacityId, int AddrId, int CustId) returnVal = await conn.QueryFirstAsync< (int, int, int, int, int) >(
                                  "[app].[SaveInitApp]",
                                  queryParameters,
                                  commandType: CommandType.StoredProcedure);
 
-                    return await Task.FromResult(returnVal);
+                    return await Task.FromResult(1);
                 }
             }
             catch (Exception ex)
@@ -85,6 +91,8 @@ namespace ApplicationWorkerDataLayer.Repositories
                 throw ex;
             }
         }
+
+
 
         // Save original application to log table
         public async Task<int> SaveClientOriginalApplication(string firstName, string lastName, string phoneNumber, string email, string ssn, string appJson)

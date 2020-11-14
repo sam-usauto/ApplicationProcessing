@@ -1,0 +1,39 @@
+﻿SET QUOTED_IDENTIFIER ON 
+GO
+SET ANSI_NULLS OFF 
+GO
+SET QUOTED_IDENTIFIER ON 
+GO
+SET ANSI_NULLS OFF 
+GO
+------------------------------------------------------------------------------------------------------------------------
+-- Date Created: Saturday, November 14, 2020
+-- Created By:   Sam Aloni
+-- Update table ClientApplication with IDs
+------------------------------------------------------------------------------------------------------------------------
+
+CREATE PROCEDURE [logs].[UpdateLogIds]
+	@Id int, 
+	@CreditScoreAppId int, 
+	@ApplicationId int, 
+	@PayingCapacityId int, 
+	@AddrId int, 
+	@CustId int
+
+AS
+
+UPDATE [logs].[ClientApplication] SET
+	[CreditScoreAppId] = @CreditScoreAppId,
+	[ApplicationId] = @ApplicationId,
+	[PayingCapacityId] = @PayingCapacityId,
+	[AddrId] = @AddrId,
+	[CustId] = @CustId
+WHERE
+	[Id] = @Id
+
+GO
+
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS ON 
+GO

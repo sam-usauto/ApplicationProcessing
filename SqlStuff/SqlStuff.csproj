@@ -42,8 +42,8 @@
     <Content Include="table.Create.ShortApp.txt" />
     <Content Include="sp.logs.SaveOriginalApp.txt" />
     <Content Include="TestingCommands.txt" />
-    <Content Include="TextFile1 - Copy %282%29.txt" />
-    <Content Include="TextFile1 - Copy %283%29.txt" />
+    <Content Include="sp.logs.UpdateLogIds.txt" />
+    <Content Include="table.Create.logs.ClientApplication.txt" />
     <Content Include="sp.app.InsertCreditScoreApplication.txt" />
     <Content Include="sp.app.InsertApplication.txt" />
     <Content Include="sp.app.InsertPayingCapacity.txt" />

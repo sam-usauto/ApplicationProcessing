@@ -1,0 +1,41 @@
+﻿USE [ScoringDBProd_Dev_Sam]
+GO
+
+/****** Object:  Table [logs].[ClientApplication]    Script Date: 11/14/2020 11:21:25 AM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+-- DROP TABLE [logs].[ClientApplication];
+
+CREATE TABLE [logs].[ClientApplication](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[FirstName] [varchar](50) NULL,
+	[LastName] [varchar](50) NULL,
+	[PhoneNumber] [varchar](max) NULL,
+	[Email] [varchar](max) NULL,
+	[Last4Ssn] [char](4) NULL,
+	[CreditScoreAppId] [int] NULL,
+	[ApplicationId] [int] NULL,
+	[PayingCapacityId] [int] NULL,
+	[AddrId] [int] NULL,
+	[CustId] [int] NULL,
+	[OriginalApp] [varchar](max) NULL,
+	[CreatedOn] [datetime] NOT NULL,
+	[ModifiedOn] [datetime] NOT NULL,
+ CONSTRAINT [PK_ClientApplication] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+ALTER TABLE [logs].[ClientApplication] ADD  CONSTRAINT [DF_ClientApplication_CreatedOn]  DEFAULT (getdate()) FOR [CreatedOn]
+GO
+
+ALTER TABLE [logs].[ClientApplication] ADD  CONSTRAINT [DF_ClientApplication_ModifiedOn]  DEFAULT (getdate()) FOR [ModifiedOn]
+GO
+
+

@@ -26,7 +26,7 @@ namespace ApplicationWorker.Controllers
         private readonly IApplicationRepository _applicationRepository;
         private readonly SsnNumberService _ssnNumberService;
 
-        private int _applicationLogInfoID = -1;
+        private int _applicationLogID = -1;
 
 
         public ApplicationController(ApplicationProcessingConfig config, IApplicationRepository applicationRepository)
@@ -58,7 +58,7 @@ namespace ApplicationWorker.Controllers
 
                 application.Data.Ssn = encryptedSSN;
                 var json = JsonConvertion.ObjectToJson<SaveShortAppWrapper>(application);
-                _applicationLogInfoID = await _applicationRepository.SaveClientOriginalApplication(
+                _applicationLogID = await _applicationRepository.SaveClientOriginalApplication(
                                     application.Data.FirstName, 
                                     application.Data.LastName,
                                     application.Data.PhoneNumber,
@@ -74,8 +74,11 @@ namespace ApplicationWorker.Controllers
                     return new HttpResponseMessage(HttpStatusCode.BadRequest);
                 }
 
+                (ShortApp app, int logId) appData = (application.Data, _applicationLogID);
+
                 //TO DO 
-                var result = await _applicationRepository.SaveApplicationToDB(application.Data);
+                //var result = await _applicationRepository.SaveApplicationToDB(application.Data);
+                var result = await _applicationRepository.SaveApplicationToDB(appData);
 
                 return new HttpResponseMessage(HttpStatusCode.OK);
             }
