@@ -1,0 +1,92 @@
+﻿USE [ScoringDBProd_Dev_Sam]
+GO
+/****** Object:  StoredProcedure [app].[InsertAddress]    Script Date: 11/14/2020 9:09:28 AM ******/
+SET ANSI_NULLS OFF
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+------------------------------------------------------------------------------------------------------------------------
+-- Date Created: Saturday, November 14, 2020
+-- Created By:   Sam Aloni
+-- Insert into table Address
+------------------------------------------------------------------------------------------------------------------------
+
+ALTER PROCEDURE [app].[InsertAddress]
+           @HouseNumber nvarchar(100),
+           @StreetName nvarchar(100),
+           @StreetTypeID int,
+           @City nvarchar(100),
+           @StateID int,
+           @PostalCode nvarchar(10),
+           @AddressLine nvarchar(100),
+           @TotalMonths int,
+           @PrevStreetName nvarchar(100),
+           @PrevCity nvarchar(100),
+           @PrevStateID int,
+           @PrevPostalCode nvarchar(50),
+           @PrevAddressLine nvarchar(100),
+           @PrevTotalMonths int,
+           @Id int OUTPUT
+AS
+
+BEGIN TRY
+    
+    SET NOCOUNT ON;
+
+    -- type of this table's column must match the type of the
+    -- identity column of the table you'll be inserting into
+    DECLARE @IdentityOutput TABLE ( ID int )
+    
+    INSERT INTO [dbo].[Address] (
+    	[HouseNumber],
+    	[StreetName],
+    	[StreetTypeID],
+    	[City],
+    	[StateID],
+    	[PostalCode],
+    	[AddressLine],
+    	[TotalMonths],
+    	[PrevStreetName],
+    	[PrevCity],
+    	[PrevStateID],
+    	[PrevPostalCode],
+    	[PrevAddressLine],
+    	[PrevTotalMonths]
+    ) 
+    
+        OUTPUT inserted.Id INTO @IdentityOutput
+
+    VALUES 
+    (
+    	@HouseNumber,
+    	@StreetName,
+    	@StreetTypeID,
+    	@City,
+    	@StateID,
+    	@PostalCode,
+    	@AddressLine,
+    	@TotalMonths,
+    	@PrevStreetName,
+    	@PrevCity,
+    	@PrevStateID,
+    	@PrevPostalCode,
+    	@PrevAddressLine,
+    	@PrevTotalMonths
+    )
+    
+    SELECT @Id = (SELECT ID FROM @IdentityOutput);
+
+
+END TRY
+BEGIN CATCH  
+        
+    SELECT  ERROR_LINE() AS [Error_Line],
+        ERROR_MESSAGE() AS [Error_Message],
+        ERROR_NUMBER() AS [Error_Number],
+        ERROR_SEVERITY() AS [Error_Severity],
+        ERROR_PROCEDURE() AS [Error_Procedure];
+
+END CATCH  
+

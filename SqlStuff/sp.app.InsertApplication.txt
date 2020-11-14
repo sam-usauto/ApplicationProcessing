@@ -1,0 +1,97 @@
+﻿SET QUOTED_IDENTIFIER ON 
+GO
+SET ANSI_NULLS OFF 
+GO
+
+------------------------------------------------------------------------------------------------------------------------
+-- Date Created: Saturday, November 14, 2020
+-- Created By:   Sam Aloni
+-- Insert into table Application
+------------------------------------------------------------------------------------------------------------------------
+
+ALTER PROCEDURE [app].[InsertApplication]
+           @IsShortApplication bit,
+           @CustomerID int,
+           @AddressID int,
+           @EmploymentID int,
+           @DateCreated datetime,
+           @CreatedBy int,
+           @DateModified datetime,
+           @ModifiedBy int,
+           @PayingCapacityID int,
+           @DataViewModelScoreID int,
+           @GeneralInfoID int,
+           @DealPushDataID int,
+           @ActiveOrFormerMilitary bit,
+           @MilitaryChoise int,
+           @TrustScienceScoreID int,
+           @Id int OUTPUT
+AS
+
+BEGIN TRY
+    
+    SET NOCOUNT ON;
+
+    -- type of this table's column must match the type of the
+    -- identity column of the table you'll be inserting into
+    DECLARE @IdentityOutput TABLE ( ID int )
+    
+    INSERT INTO [dbo].[Application] (
+    	[IsShortApplication],
+    	[CustomerID],
+    	[AddressID],
+    	[EmploymentID],
+    	[DateCreated],
+    	[CreatedBy],
+    	[DateModified],
+    	[ModifiedBy],
+    	[PayingCapacityID],
+    	[DataViewModelScoreID],
+    	[GeneralInfoID],
+    	[DealPushDataID],
+    	[ActiveOrFormerMilitary],
+    	[MilitaryChoise],
+    	[TrustScienceScoreID]
+    ) 
+    
+        OUTPUT inserted.Id INTO @IdentityOutput
+
+    VALUES 
+    (
+    	@IsShortApplication,
+    	@CustomerID,
+    	@AddressID,
+    	@EmploymentID,
+    	@DateCreated,
+    	@CreatedBy,
+    	@DateModified,
+    	@ModifiedBy,
+    	@PayingCapacityID,
+    	@DataViewModelScoreID,
+    	@GeneralInfoID,
+    	@DealPushDataID,
+    	@ActiveOrFormerMilitary,
+    	@MilitaryChoise,
+    	@TrustScienceScoreID
+    )
+    
+    SELECT @Id = (SELECT ID FROM @IdentityOutput);
+
+END TRY
+BEGIN CATCH  
+        
+    SELECT  ERROR_LINE() AS [Error_Line],
+        ERROR_MESSAGE() AS [Error_Message],
+        ERROR_NUMBER() AS [Error_Number],
+        ERROR_SEVERITY() AS [Error_Severity],
+        ERROR_PROCEDURE() AS [Error_Procedure];
+    
+END CATCH  
+
+GO
+
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS ON 
+GO
+

@@ -1,0 +1,80 @@
+﻿SET QUOTED_IDENTIFIER ON 
+GO
+SET ANSI_NULLS OFF 
+GO
+
+------------------------------------------------------------------------------------------------------------------------
+-- Date Created: Saturday, November 14, 2020
+-- Created By:   Sam Aloni
+-- Insert into table PayingCapacity
+------------------------------------------------------------------------------------------------------------------------
+
+ALTER PROCEDURE [app].[InsertPayingCapacity]
+           @HousingTypeID int,
+           @HousingPayment decimal(18, 2),
+           @SalaryTypeID int,
+           @OtherIncome decimal(18, 2),
+           @AvailableDownPayment decimal(18, 2),
+           @Bankruptcy bit,
+           @CurrentBankruptcy bit,
+           @PaymentTypeID int,
+           @PeriodPaycheck decimal(18, 2),
+           @Id int OUTPUT
+AS
+
+BEGIN TRY
+    
+    SET NOCOUNT ON;
+
+    -- type of this table's column must match the type of the
+    -- identity column of the table you'll be inserting into
+    DECLARE @IdentityOutput TABLE ( ID int )
+    
+    INSERT INTO [dbo].[PayingCapacity] (
+    	[HousingTypeID],
+    	[HousingPayment],
+    	[SalaryTypeID],
+    	[OtherIncome],
+    	[AvailableDownPayment],
+    	[Bankruptcy],
+    	[CurrentBankruptcy],
+    	[PaymentTypeID],
+    	[PeriodPaycheck]
+    ) 
+    
+        OUTPUT inserted.Id INTO @IdentityOutput
+
+    VALUES 
+    (
+    	@HousingTypeID,
+    	@HousingPayment,
+    	@SalaryTypeID,
+    	@OtherIncome,
+    	@AvailableDownPayment,
+    	@Bankruptcy,
+    	@CurrentBankruptcy,
+    	@PaymentTypeID,
+    	@PeriodPaycheck
+    )
+    
+    SELECT @Id = (SELECT ID FROM @IdentityOutput);
+
+
+END TRY
+BEGIN CATCH  
+        
+    SELECT  ERROR_LINE() AS [Error_Line],
+        ERROR_MESSAGE() AS [Error_Message],
+        ERROR_NUMBER() AS [Error_Number],
+        ERROR_SEVERITY() AS [Error_Severity],
+        ERROR_PROCEDURE() AS [Error_Procedure];
+
+END CATCH  
+
+GO
+
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS ON 
+GO
+

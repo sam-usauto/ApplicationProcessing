@@ -1,0 +1,103 @@
+﻿SET QUOTED_IDENTIFIER ON 
+GO
+SET ANSI_NULLS OFF 
+GO
+
+------------------------------------------------------------------------------------------------------------------------
+-- Date Created: Saturday, November 14, 2020
+-- Created By:   Sam Aloni
+-- Insert into table CreditScoreApplication
+------------------------------------------------------------------------------------------------------------------------
+
+ALTER PROCEDURE [app].[InsertCreditScoreApplication]
+           @LotID int,
+           @PrimaryBuyerApplicationID int,
+           @CoBuyerApplicationID int,
+           @CreditAppStatusID int,
+           @PrimaryScoreID int,
+           @CoBuyerScoreID int,
+           @JointScoreID int,
+           @IsActive bit,
+           @CreatedBy int,
+           @ModifiedBy int,
+           @DateCreated datetime,
+           @DateModified datetime,
+           @ClientAncestorID int,
+           @SFSalesUpID nvarchar(25),
+           @SFCreditAppID nvarchar(25),
+           @ReferrerCode varchar(100),
+           @ActiveOrFormerMilitary bit,
+           @Id int OUTPUT
+AS
+
+BEGIN TRY
+    
+    SET NOCOUNT ON;
+
+    -- type of this table's column must match the type of the
+    -- identity column of the table you'll be inserting into
+    DECLARE @IdentityOutput TABLE ( ID int )
+    
+    INSERT INTO [dbo].[CreditScoreApplication] (
+    	[LotID],
+    	[PrimaryBuyerApplicationID],
+    	[CoBuyerApplicationID],
+    	[CreditAppStatusID],
+    	[PrimaryScoreID],
+    	[CoBuyerScoreID],
+    	[JointScoreID],
+    	[IsActive],
+    	[CreatedBy],
+    	[ModifiedBy],
+    	[DateCreated],
+    	[DateModified],
+    	[ClientAncestorID],
+    	[SFSalesUpID],
+    	[SFCreditAppID],
+    	[ReferrerCode],
+    	[ActiveOrFormerMilitary]
+    ) 
+    
+        OUTPUT inserted.Id INTO @IdentityOutput
+
+    VALUES 
+    (
+    	@LotID,
+    	@PrimaryBuyerApplicationID,
+    	@CoBuyerApplicationID,
+    	@CreditAppStatusID,
+    	@PrimaryScoreID,
+    	@CoBuyerScoreID,
+    	@JointScoreID,
+    	@IsActive,
+    	@CreatedBy,
+    	@ModifiedBy,
+    	@DateCreated,
+    	@DateModified,
+    	@ClientAncestorID,
+    	@SFSalesUpID,
+    	@SFCreditAppID,
+    	@ReferrerCode,
+    	@ActiveOrFormerMilitary
+    )
+    
+    SELECT @Id = (SELECT ID FROM @IdentityOutput);
+
+END TRY
+BEGIN CATCH  
+        
+    SELECT  ERROR_LINE() AS [Error_Line],
+        ERROR_MESSAGE() AS [Error_Message],
+        ERROR_NUMBER() AS [Error_Number],
+        ERROR_SEVERITY() AS [Error_Severity],
+        ERROR_PROCEDURE() AS [Error_Procedure];
+
+END CATCH  
+
+GO
+
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS ON 
+GO
+

@@ -1,0 +1,112 @@
+﻿SET QUOTED_IDENTIFIER ON 
+GO
+SET ANSI_NULLS OFF 
+GO
+
+------------------------------------------------------------------------------------------------------------------------
+-- Date Created: Saturday, November 14, 2020
+-- Created By:   Sam Aloni
+-- Insert into table Customer
+------------------------------------------------------------------------------------------------------------------------
+
+CREATE PROCEDURE [app].[InsertCustomer]
+           @FirstName nvarchar(50),
+           @MiddleName nvarchar(50),
+           @LastName nvarchar(50),
+           @SuffixTypeID int,
+           @SSN nvarchar(255),
+           @Last4SSN nvarchar(10),
+           @DateOfBirth date,
+           @DriverLicenseNumber nvarchar(50),
+           @DriverLicenseStateID int,
+           @HomePhone nvarchar(50),
+           @MobilePhone nvarchar(50),
+           @EmailAddress nvarchar(50),
+           @MobileConsent bit,
+           @IsPoSubmitted bit,
+           @DateCreated datetime,
+           @CreatedBy int,
+           @DateModified datetime,
+           @ModifiedBy int,
+           @HasBeenVerified bit,
+           @DriverlicenseExpirationDate date,
+           @Id int OUTPUT
+AS
+
+BEGIN TRY
+    
+    SET NOCOUNT ON;
+
+    -- type of this table's column must match the type of the
+    -- identity column of the table you'll be inserting into
+    DECLARE @IdentityOutput TABLE ( ID int )
+    
+    INSERT INTO [dbo].[Customer] (
+    	[FirstName],
+    	[MiddleName],
+    	[LastName],
+    	[SuffixTypeID],
+    	[SSN],
+    	[Last4SSN],
+    	[DateOfBirth],
+    	[DriverLicenseNumber],
+    	[DriverLicenseStateID],
+    	[HomePhone],
+    	[MobilePhone],
+    	[EmailAddress],
+    	[MobileConsent],
+    	[IsPoSubmitted],
+    	[DateCreated],
+    	[CreatedBy],
+    	[DateModified],
+    	[ModifiedBy],
+    	[HasBeenVerified],
+    	[DriverlicenseExpirationDate]
+    ) 
+    
+        OUTPUT inserted.Id INTO @IdentityOutput
+
+    VALUES 
+    (
+    	@FirstName,
+    	@MiddleName,
+    	@LastName,
+    	@SuffixTypeID,
+    	@SSN,
+    	@Last4SSN,
+    	@DateOfBirth,
+    	@DriverLicenseNumber,
+    	@DriverLicenseStateID,
+    	@HomePhone,
+    	@MobilePhone,
+    	@EmailAddress,
+    	@MobileConsent,
+    	@IsPoSubmitted,
+    	@DateCreated,
+    	@CreatedBy,
+    	@DateModified,
+    	@ModifiedBy,
+    	@HasBeenVerified,
+    	@DriverlicenseExpirationDate
+    )
+    
+    SELECT @Id = (SELECT ID FROM @IdentityOutput);
+
+END TRY
+BEGIN CATCH  
+        
+    SELECT  ERROR_LINE() AS [Error_Line],
+        ERROR_MESSAGE() AS [Error_Message],
+        ERROR_NUMBER() AS [Error_Number],
+        ERROR_SEVERITY() AS [Error_Severity],
+        ERROR_PROCEDURE() AS [Error_Procedure];
+
+END CATCH  
+
+GO
+
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS ON 
+GO
+
