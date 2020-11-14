@@ -74,10 +74,10 @@ namespace ApplicationWorker.Controllers
                     return new HttpResponseMessage(HttpStatusCode.BadRequest);
                 }
 
+                // Tuples
                 (ShortApp app, int logId) appData = (application.Data, _applicationLogID);
 
-                //TO DO 
-                //var result = await _applicationRepository.SaveApplicationToDB(application.Data);
+                // return the Ids of all the inserted tables
                 var result = await _applicationRepository.SaveApplicationToDB(appData);
 
                 return new HttpResponseMessage(HttpStatusCode.OK);

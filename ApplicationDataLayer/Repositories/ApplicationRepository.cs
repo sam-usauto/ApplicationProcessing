@@ -36,7 +36,7 @@ namespace ApplicationWorkerDataLayer.Repositories
         }
 
         // Save init application to related tables
-        public async Task<int> SaveApplicationToDB((ShortApp application, int logId) applicationAndLog)
+        public async Task<ClientApplicationLogIds> SaveApplicationToDB((ShortApp application, int logId) applicationAndLog)
         {
             try
             {
@@ -78,12 +78,12 @@ namespace ApplicationWorkerDataLayer.Repositories
                     // pass the log ID
                     queryParameters.Add("@LogId", logID);
 
-                    (int CreditScoreAppId, int ApplicationId, int PayingCapacityId, int AddrId, int CustId) returnVal = await conn.QueryFirstAsync< (int, int, int, int, int) >(
+                    ClientApplicationLogIds returnVal = await conn.QueryFirstAsync<ClientApplicationLogIds>(
                                  "[app].[SaveInitApp]",
                                  queryParameters,
                                  commandType: CommandType.StoredProcedure);
 
-                    return await Task.FromResult(1);
+                    return await Task.FromResult(returnVal);
                 }
             }
             catch (Exception ex)
