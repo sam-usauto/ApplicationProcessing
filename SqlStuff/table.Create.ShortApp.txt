@@ -38,7 +38,10 @@ CREATE TABLE [temp].[ShortApp](
 	[Ssn] [varchar](100) NULL,
 	[CurrentlyInBankruptcy] [bit] NULL,
 	[ClientIP] [varchar](100) NULL,
-	[Last4Ssn] [char](4) NULL
+	[Last4Ssn] [char](4) NULL,
+	[LogId] [int] NULL,
+	[UserId] [int] NULL,
+	[LotID] [int] NULL
  CONSTRAINT [PK_Application] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC

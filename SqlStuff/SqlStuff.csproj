@@ -53,9 +53,9 @@
     <Content Include="TextFile1 - Copy %283%29.txt" />
     <Content Include="TextFile1 - Copy %284%29.txt" />
     <Content Include="TextFile1 - Copy %285%29.txt" />
-    <Content Include="TextFile1 - Copy %286%29.txt" />
-    <Content Include="TextFile1 - Copy.txt" />
-    <Content Include="TextFile1.txt" />
+    <Content Include="table.Create.ApplicationFlow.txt" />
+    <Content Include="table.Create.logs.ClientAppStep.txt" />
+    <Content Include="table.Create.ApplicationStep.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
