@@ -11,5 +11,6 @@ namespace Common.DTOs.Application
         public int PayingCapacityId { get; set; }
         public int AddrId { get; set; }
         public int CustId { get; set; }
+        public int EmploymentId { get; set; }
     }
 }

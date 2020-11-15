@@ -49,6 +49,13 @@
     <Content Include="sp.app.InsertPayingCapacity.txt" />
     <Content Include="sp.app.InsertAddress.txt" />
     <Content Include="sp.app.InsertCustomer.txt" />
+    <Content Include="sp.app.InsertEmployment.txt" />
+    <Content Include="TextFile1 - Copy %283%29.txt" />
+    <Content Include="TextFile1 - Copy %284%29.txt" />
+    <Content Include="TextFile1 - Copy %285%29.txt" />
+    <Content Include="TextFile1 - Copy %286%29.txt" />
+    <Content Include="TextFile1 - Copy.txt" />
+    <Content Include="TextFile1.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

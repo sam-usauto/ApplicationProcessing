@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -26,8 +27,11 @@ namespace ApplicationWorker.Controllers
         private readonly IApplicationRepository _applicationRepository;
         private readonly SsnNumberService _ssnNumberService;
 
-        private int _applicationLogID = -1;
-
+        private int _applicationLogID = -1; 
+        // TODO: build method to get userID
+        private int _userID = 142;
+        // TODO: build method to get defualted lot ID
+        private int _lotID = 99;
 
         public ApplicationController(ApplicationProcessingConfig config, IApplicationRepository applicationRepository)
         {
@@ -75,16 +79,22 @@ namespace ApplicationWorker.Controllers
                 }
 
                 // Tuples
-                (ShortApp app, int logId) appData = (application.Data, _applicationLogID);
+                (ShortApp app, int logId, int _userID, int _lotID) appData = (application.Data, _applicationLogID, _userID, _lotID);
 
                 // return the Ids of all the inserted tables
                 var result = await _applicationRepository.SaveApplicationToDB(appData);
 
                 return new HttpResponseMessage(HttpStatusCode.OK);
             }
+            catch (SqlException ex)
+            {
+                throw ex;
+                //return new HttpResponseMessage(HttpStatusCode.BadRequest);
+            }
             catch (Exception ex)
             {
                 throw ex;
+                //return new HttpResponseMessage(HttpStatusCode.BadRequest);
             }
         }
 

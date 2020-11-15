@@ -22,7 +22,9 @@ CREATE TABLE [logs].[ClientApplication](
 	[PayingCapacityId] [int] NULL,
 	[AddrId] [int] NULL,
 	[CustId] [int] NULL,
+	[EmploymentId] [int] NULL,
 	[OriginalApp] [varchar](max) NULL,
+	[InitAppSaveError] [varchar](max) NULL,
 	[CreatedOn] [datetime] NOT NULL,
 	[ModifiedOn] [datetime] NOT NULL,
  CONSTRAINT [PK_ClientApplication] PRIMARY KEY CLUSTERED 

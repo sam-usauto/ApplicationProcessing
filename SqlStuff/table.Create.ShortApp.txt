@@ -31,6 +31,7 @@ CREATE TABLE [temp].[ShortApp](
 	[TimeAtJobMonths] [varchar](100) NULL,
 	[NetPeriodPaycheck] [decimal](18,2) NULL,
 	[PaymentTypeId] [int] NULL,
+	[OtherIncome] [decimal](18,2) NULL,
 	[OtherIncomePayPeriodId] [int] NULL,
 	[ActiveOrFormerMilitary] [bit] NULL,
 	[MilitaryChoise] [int] NULL,

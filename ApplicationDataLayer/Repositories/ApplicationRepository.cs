@@ -36,7 +36,7 @@ namespace ApplicationWorkerDataLayer.Repositories
         }
 
         // Save init application to related tables
-        public async Task<ClientApplicationLogIds> SaveApplicationToDB((ShortApp application, int logId) applicationAndLog)
+        public async Task<ClientApplicationLogIds> SaveApplicationToDB((ShortApp application, int logId, int userID, int lotID) applicationAndLog)
         {
             try
             {
@@ -44,6 +44,8 @@ namespace ApplicationWorkerDataLayer.Repositories
                 {
                     var application = applicationAndLog.application;
                     var logID = applicationAndLog.logId;
+                    var userID = applicationAndLog.userID;
+                    var lotID = applicationAndLog.lotID;
 
                     var queryParameters = new DynamicParameters();
 
@@ -67,6 +69,7 @@ namespace ApplicationWorkerDataLayer.Repositories
                     queryParameters.Add("@TimeAtJobMonths", application.TimeAtJobMonths);
                     queryParameters.Add("@NetPeriodPaycheck", application.NetPeriodPaycheck);
                     queryParameters.Add("@PaymentTypeId", application.PaymentTypeId);
+                    queryParameters.Add("@OtherIncome", application.OtherIncome);
                     queryParameters.Add("@OtherIncomePayPeriodId", application.OtherIncomePayPeriodId);
                     queryParameters.Add("@ActiveOrFormerMilitary", application.ActiveOrFormerMilitary);
                     queryParameters.Add("@MilitaryChoise", application.MilitaryChoise);
@@ -77,6 +80,10 @@ namespace ApplicationWorkerDataLayer.Repositories
 
                     // pass the log ID
                     queryParameters.Add("@LogId", logID);
+                    // Modified By ID
+                    queryParameters.Add("@UserId",userID);
+                    queryParameters.Add("@LotID", lotID);
+
 
                     ClientApplicationLogIds returnVal = await conn.QueryFirstAsync<ClientApplicationLogIds>(
                                  "[app].[SaveInitApp]",
@@ -85,6 +92,10 @@ namespace ApplicationWorkerDataLayer.Repositories
 
                     return await Task.FromResult(returnVal);
                 }
+            }
+            catch (SqlException ex)
+            {
+                throw ex;
             }
             catch (Exception ex)
             {
