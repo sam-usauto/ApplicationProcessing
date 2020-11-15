@@ -1,22 +1,22 @@
 ﻿USE [ScoringDBProd_Dev_Sam]
 GO
 
-/****** Object:  Table [logs].[ClientAppStep]    Script Date: 11/14/2020 11:21:25 AM ******/
+/****** Object:  Table [dbo].[ApplicationFlowStep]    Script Date: 11/14/2020 11:21:25 AM ******/
 SET ANSI_NULLS ON
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
 
--- DROP TABLE [logs].[ClientAppStep];
+-- DROP TABLE [dbo].[ApplicationFlowStep];
 
-CREATE TABLE [logs].[ClientAppStep](
+CREATE TABLE [dbo].[ApplicationFlowStep](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
-	[ClientApplicationLogId] [int] NULL,
-	[ApplicationStepId] [int] NULL,
-	[IsCompleted] [bit]
+	[ApplicationFlowID] [int] NULL,
+	[ViewOrder] [int] NULL,
+	[IsActive] [bit]
 
- CONSTRAINT [PK_ClientAppStep] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_ApplicationFlowStep] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]

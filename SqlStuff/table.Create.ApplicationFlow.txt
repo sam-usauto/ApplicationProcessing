@@ -13,6 +13,7 @@ GO
 CREATE TABLE [dbo].[ApplicationFlow](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
 	[FlowName] [varchar](100) NULL,
+    [CreatedOn] [datetime] NOT NULL,
 	[IsActive] [bit]
 
  CONSTRAINT [PK_ApplicationFlow] PRIMARY KEY CLUSTERED 
@@ -23,12 +24,18 @@ CREATE TABLE [dbo].[ApplicationFlow](
 GO
 
 INSERT INTO [dbo].[ApplicationFlow]
-           ([FlowName]
-           ,[IsActive])
+           (
+            [FlowName]
+           ,[CreatedOn]
+           ,[IsActive]
+           )
      VALUES
            ('Basic'
+           ,GETDATE()
            ,1);
 GO
+
+SELECT * FROM [dbo].[ApplicationFlow] ORDER BY IsActive DESC;
 
 
 

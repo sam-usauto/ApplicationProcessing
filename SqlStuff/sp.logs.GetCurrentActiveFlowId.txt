@@ -1,0 +1,28 @@
+﻿SET QUOTED_IDENTIFIER ON 
+GO
+SET ANSI_NULLS OFF 
+GO
+SET QUOTED_IDENTIFIER ON 
+GO
+SET ANSI_NULLS OFF 
+GO
+------------------------------------------------------------------------------------------------------------------------
+-- Date Created: Saturday, November 15, 2020
+-- Created By:   Sam Aloni
+-- Get the ID of the current active Application Flow
+-- EXEC [logs].[GetCurrentActiveFlowId];
+------------------------------------------------------------------------------------------------------------------------
+
+CREATE PROCEDURE [logs].[GetStepsFlowId]
+
+AS
+SELECT [Id]
+FROM [dbo].[ApplicationFlow]
+WHERE [IsActive] = 1;
+
+GO
+
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS ON 
+GO

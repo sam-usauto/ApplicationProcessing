@@ -38,11 +38,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Create Schemas.txt" />
+    <Content Include="sp.logs.GetCurrentActiveFlowId.txt" />
     <Content Include="Sql code.txt" />
     <Content Include="table.Create.ShortApp.txt" />
     <Content Include="sp.logs.SaveOriginalApp.txt" />
     <Content Include="TestingCommands.txt" />
-    <Content Include="sp.logs.UpdateLogIds.txt" />
     <Content Include="table.Create.logs.ClientApplication.txt" />
     <Content Include="sp.app.InsertCreditScoreApplication.txt" />
     <Content Include="sp.app.InsertApplication.txt" />
@@ -51,8 +51,8 @@
     <Content Include="sp.app.InsertCustomer.txt" />
     <Content Include="sp.app.InsertEmployment.txt" />
     <Content Include="TextFile1 - Copy %283%29.txt" />
-    <Content Include="TextFile1 - Copy %284%29.txt" />
-    <Content Include="TextFile1 - Copy %285%29.txt" />
+    <Content Include="logs.ApplicationFlowStepResult.txt" />
+    <Content Include="sp.GetCurrentActiveFlowId.txt" />
     <Content Include="table.Create.ApplicationFlow.txt" />
     <Content Include="table.Create.logs.ClientAppStep.txt" />
     <Content Include="table.Create.ApplicationStep.txt" />
