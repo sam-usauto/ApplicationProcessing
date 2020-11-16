@@ -1,0 +1,55 @@
+﻿SELECT * FROM [dbo].[ApplicationFlow];
+
+SELECT * FROM [dbo].[ApplicationFlowStep];
+
+
+/*
+INSERT INTO [dbo].[ApplicationFlowStep]
+			([ApplicationFlowId],
+            [StepName]
+           ,[StepOrder]
+           ,[IsActive]
+           ,[ExecuteUrl]
+		   )
+     VALUES
+           (
+		   1,
+           'Scorring Solution'
+           ,1
+           ,1
+           ,'http:\localhost'
+		   );
+
+	INSERT INTO [dbo].[ApplicationFlowStep]
+			([ApplicationFlowId],
+            [StepName]
+           ,[StepOrder]
+           ,[IsActive]
+           ,[ExecuteUrl]
+		   )
+     VALUES
+           (
+		   1,
+           'Point Predictive'
+           ,2
+           ,1
+           ,'http:\localhost'
+		   );
+
+
+INSERT INTO [dbo].[ApplicationFlowStep]
+			([ApplicationFlowId],
+            [StepName]
+           ,[StepOrder]
+           ,[IsActive]
+           ,[ExecuteUrl]
+		   )
+     VALUES
+           (1,
+           'Trust Science'
+           ,3
+           ,1
+           ,'http:\localhost'
+		   );
+
+*/

@@ -50,7 +50,7 @@
     <Content Include="sp.app.InsertAddress.txt" />
     <Content Include="sp.app.InsertCustomer.txt" />
     <Content Include="sp.app.InsertEmployment.txt" />
-    <Content Include="TextFile1 - Copy %283%29.txt" />
+    <Content Include="TestAndLoadApplicationFlowTables.txt" />
     <Content Include="logs.ApplicationFlowStepResult.txt" />
     <Content Include="sp.GetCurrentActiveFlowId.txt" />
     <Content Include="table.Create.ApplicationFlow.txt" />

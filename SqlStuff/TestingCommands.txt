@@ -1,5 +1,11 @@
 ﻿
 
+SELECT * FROM [dbo].[ApplicationFlow];
+
+SELECT * FROM [dbo].[ApplicationFlowStep];
+
+
+
 SELECT TOP (100) [Id]
       ,[FirstName]
       ,[LastName]

@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using ApplicationWorker.Helper;
 using ApplicationWorkerDataLayer.Interfaces;
 using ApplicationWorkerDataLayer.Repositories;
+using Common.DTOs;
 using Common.DTOs.Application;
 using Common.DTOs.Configurations.ApplicationWorker;
 using Common.Helper;
@@ -46,43 +47,66 @@ namespace ApplicationWorker.Controllers
         {
             try
             {
-                application.Data.ClientIP = GetClientIP();
-                application.Data.Last4Ssn = GetLast4Ssn(application.Data.Ssn);
-                // TODO - need to encrypt SSN
-                // mask the SSN for the Json
-                var ssnPlain = application.Data.Ssn;
+                // Load ClientIP, Encrypt SS, save last 4 SSN etc.
+                await PreprocessApplication(application);
 
-                var encryptedSSN = "Error";
-                // call the SSN decryption
-                if (String.IsNullOrEmpty(ssnPlain) == false)
-                {
-                    var ssnResp = await _ssnNumberService.EncryptSsn(ssnPlain);
-                    encryptedSSN = ssnResp.ResponseData;
-                }
-
-                application.Data.Ssn = encryptedSSN;
-                var json = JsonConvertion.ObjectToJson<SaveShortAppWrapper>(application);
-                _applicationLogID = await _applicationRepository.SaveClientOriginalApplication(
-                                    application.Data.FirstName, 
-                                    application.Data.LastName,
-                                    application.Data.PhoneNumber,
-                                    application.Data.Email,
-                                    _ssnNumberService.LastFourDigits(ssnPlain),
-                                    json);
-
-
-                var appValidator = new AppValidator();
-                var validationErrorList = appValidator.ValidateApp(application);
-                if (validationErrorList.Count > 0)
+                // validate application
+                var errorList = ValidateApplication(application);
+                if (errorList.Count > 0)
                 {
                     return new HttpResponseMessage(HttpStatusCode.BadRequest);
                 }
 
+                // save original plain application to log and the Log entry id to class provate
+                _applicationLogID = await LogInitApplication(application);
+
                 // Tuples
                 (ShortApp app, int logId, int _userID, int _lotID) appData = (application.Data, _applicationLogID, _userID, _lotID);
 
+                // return the Ids of all the inserted tables related to the application
+                var SaveToDbResult = await _applicationRepository.SaveApplicationToDB(appData);
+
+                //application.Data.ClientIP = GetClientIP();
+                //application.Data.Last4Ssn = GetLast4Ssn(application.Data.Ssn);
+                //// TODO - need to encrypt SSN
+                //// mask the SSN for the Json
+                //var ssnPlain = application.Data.Ssn;
+
+                //var encryptedSSN = "Error";
+                //// call the SSN decryption
+                //if (String.IsNullOrEmpty(ssnPlain) == false)
+                //{
+                //    var ssnResp = await _ssnNumberService.EncryptSsn(ssnPlain);
+                //    encryptedSSN = ssnResp.ResponseData;
+                //}
+
+                //application.Data.Ssn = encryptedSSN;
+
+                //var json = JsonConvertion.ObjectToJson<SaveShortAppWrapper>(application);
+
+                //var appValidator = new AppValidator();
+                //var validationErrorList = appValidator.ValidateApp(application);
+                //if (validationErrorList.Count > 0)
+                //{
+                //    return new HttpResponseMessage(HttpStatusCode.BadRequest);
+                //}
+
+                //var ssnPlain = application.Data.Ssn;
+                //_applicationLogID = await _applicationRepository.SaveClientOriginalApplication(
+                //                    application.Data.FirstName, 
+                //                    application.Data.LastName,
+                //                    application.Data.PhoneNumber,
+                //                    application.Data.Email,
+                //                    _ssnNumberService.LastFourDigits(ssnPlain),
+                //                    json);
+
+                //var tuplesIds = await LogInitApplication(application);
+
+                // Tuples
+                //(ShortApp app, int logId, int _userID, int _lotID) appData = (application.Data, _applicationLogID, _userID, _lotID);
+
                 // return the Ids of all the inserted tables
-                var result = await _applicationRepository.SaveApplicationToDB(appData);
+                //var result1 = await _applicationRepository.SaveApplicationToDB(tuplesIds);
 
                 return new HttpResponseMessage(HttpStatusCode.OK);
             }
@@ -97,6 +121,82 @@ namespace ApplicationWorker.Controllers
                 //return new HttpResponseMessage(HttpStatusCode.BadRequest);
             }
         }
+
+        //private async Task<(ShortApp app, int logId, int _userID, int _lotID)> LogInitApplication(SaveShortAppWrapper application)
+        // Tuples
+        //(ShortApp app, int logId, int _userID, int _lotID) appData = (application.Data, _applicationLogID, _userID, _lotID);
+
+        // log the application into [logs].[ClientApplication] table
+        private async Task<int> LogInitApplication(SaveShortAppWrapper application)
+        {
+            try
+            {
+                var json = JsonConvertion.ObjectToJson<SaveShortAppWrapper>(application);
+
+                var ssnPlain = application.Data.Ssn;
+                var applicationLogID = await _applicationRepository.SaveClientOriginalApplication(
+                                    application.Data.FirstName,
+                                    application.Data.LastName,
+                                    application.Data.PhoneNumber,
+                                    application.Data.Email,
+                                    _ssnNumberService.LastFourDigits(ssnPlain),
+                                    json);
+
+                return applicationLogID;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        // validate application... Return collection of errors
+        private List<BrokenBusinessRule> ValidateApplication(SaveShortAppWrapper application)
+        {
+            var appValidator = new AppValidator();
+            var validationErrorList = appValidator.ValidateApp(application);
+            return validationErrorList;
+        }
+
+        // preprocess application... add missing fields 
+        private async Task PreprocessApplication(SaveShortAppWrapper application)
+        {
+            application.Data.ClientIP = GetClientIP();
+            application.Data.Last4Ssn = GetLast4Ssn(application.Data.Ssn);
+            // TODO - need to encrypt SSN
+            // mask the SSN for the Json
+            var ssnPlain = application.Data.Ssn;
+
+            var encryptedSSN = "Error";
+            // call the SSN decryption
+            if (String.IsNullOrEmpty(ssnPlain) == false)
+            {
+                var ssnResp = await _ssnNumberService.EncryptSsn(ssnPlain);
+                encryptedSSN = ssnResp.ResponseData;
+            }
+
+            application.Data.Ssn = encryptedSSN;
+        }
+
+        // execute the Processing application steps
+        private void ExecuteApplicationProcessing(SaveShortAppWrapper application)
+        {
+            try
+            {
+                LogOriginalApp(application);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+
+        private void LogOriginalApp(SaveShortAppWrapper application)
+        {
+            throw new NotImplementedException();
+        }
+
 
         [HttpGet]
         [Route("config")]
