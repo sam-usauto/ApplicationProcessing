@@ -93,6 +93,15 @@ namespace ApplicationWorker.Controllers
             try
             {
                 var steps = await GetApplicationFlowSteps(_applicationLogID);
+                // execute incompleted steps
+                foreach (var step in steps)
+                {
+                    if (step.IsCompleted == false)
+                    {
+
+                    }
+                }
+
                 await Task.FromResult(1);
             }
             catch (Exception ex)
@@ -107,6 +116,7 @@ namespace ApplicationWorker.Controllers
             try
             {
                 var stepList = await _applicationRepository.GetApplicationFlowSteps(logID);
+
                 return stepList;
             }
             catch (Exception ex)
@@ -166,9 +176,6 @@ namespace ApplicationWorker.Controllers
 
             application.Data.Ssn = encryptedSSN;
         }
-
-
-
 
 
 
