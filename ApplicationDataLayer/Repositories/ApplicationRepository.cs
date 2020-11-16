@@ -103,6 +103,28 @@ namespace ApplicationWorkerDataLayer.Repositories
             }
         }
 
+        public async Task<IEnumerable<ApplicationFlowStep>> GetApplicationFlowSteps(int logID)       
+        {
+            try
+            {
+                using (var conn = new SqlConnection(_scoringDbConn))
+                {
+                    var queryParameters = new DynamicParameters();
+                    queryParameters.Add("@LogID", logID);
+
+                    var stepList = await conn.QueryAsync<ApplicationFlowStep>(
+                                 "[app].[GetApplicationFlowSteps]",
+                                 queryParameters,
+                                 commandType: CommandType.StoredProcedure);
+
+                    return stepList;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
 
         // Save original application to log table

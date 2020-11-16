@@ -66,47 +66,8 @@ namespace ApplicationWorker.Controllers
                 // return the Ids of all the inserted tables related to the application
                 var SaveToDbResult = await _applicationRepository.SaveApplicationToDB(appData);
 
-                //application.Data.ClientIP = GetClientIP();
-                //application.Data.Last4Ssn = GetLast4Ssn(application.Data.Ssn);
-                //// TODO - need to encrypt SSN
-                //// mask the SSN for the Json
-                //var ssnPlain = application.Data.Ssn;
-
-                //var encryptedSSN = "Error";
-                //// call the SSN decryption
-                //if (String.IsNullOrEmpty(ssnPlain) == false)
-                //{
-                //    var ssnResp = await _ssnNumberService.EncryptSsn(ssnPlain);
-                //    encryptedSSN = ssnResp.ResponseData;
-                //}
-
-                //application.Data.Ssn = encryptedSSN;
-
-                //var json = JsonConvertion.ObjectToJson<SaveShortAppWrapper>(application);
-
-                //var appValidator = new AppValidator();
-                //var validationErrorList = appValidator.ValidateApp(application);
-                //if (validationErrorList.Count > 0)
-                //{
-                //    return new HttpResponseMessage(HttpStatusCode.BadRequest);
-                //}
-
-                //var ssnPlain = application.Data.Ssn;
-                //_applicationLogID = await _applicationRepository.SaveClientOriginalApplication(
-                //                    application.Data.FirstName, 
-                //                    application.Data.LastName,
-                //                    application.Data.PhoneNumber,
-                //                    application.Data.Email,
-                //                    _ssnNumberService.LastFourDigits(ssnPlain),
-                //                    json);
-
-                //var tuplesIds = await LogInitApplication(application);
-
-                // Tuples
-                //(ShortApp app, int logId, int _userID, int _lotID) appData = (application.Data, _applicationLogID, _userID, _lotID);
-
-                // return the Ids of all the inserted tables
-                //var result1 = await _applicationRepository.SaveApplicationToDB(tuplesIds);
+                // process the Application flow steps
+                await ExecuteApplicationProcessing(application.Data);
 
                 return new HttpResponseMessage(HttpStatusCode.OK);
             }
@@ -125,6 +86,34 @@ namespace ApplicationWorker.Controllers
         //private async Task<(ShortApp app, int logId, int _userID, int _lotID)> LogInitApplication(SaveShortAppWrapper application)
         // Tuples
         //(ShortApp app, int logId, int _userID, int _lotID) appData = (application.Data, _applicationLogID, _userID, _lotID);
+
+        // execute the Processing application steps
+        private async Task ExecuteApplicationProcessing(ShortApp shortApp)
+        {
+            try
+            {
+                var steps = await GetApplicationFlowSteps(_applicationLogID);
+                await Task.FromResult(1);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+        // log the application into [logs].[ClientApplication] table
+        private async Task<IEnumerable<ApplicationFlowStep>> GetApplicationFlowSteps(int logID)
+        {
+            try
+            {
+                var stepList = await _applicationRepository.GetApplicationFlowSteps(logID);
+                return stepList;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
         // log the application into [logs].[ClientApplication] table
         private async Task<int> LogInitApplication(SaveShortAppWrapper application)
@@ -178,24 +167,9 @@ namespace ApplicationWorker.Controllers
             application.Data.Ssn = encryptedSSN;
         }
 
-        // execute the Processing application steps
-        private void ExecuteApplicationProcessing(SaveShortAppWrapper application)
-        {
-            try
-            {
-                LogOriginalApp(application);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
 
-        }
 
-        private void LogOriginalApp(SaveShortAppWrapper application)
-        {
-            throw new NotImplementedException();
-        }
+
 
 
         [HttpGet]
