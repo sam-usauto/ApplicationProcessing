@@ -38,7 +38,7 @@ namespace ApplicationWorker.Controllers
         {
             _config = config;
             _applicationRepository = applicationRepository;
-            _ssnNumberService = new SsnNumberService(_config);
+            _ssnNumberService = new SsnNumberService(_config.SsnEncryptUrl, _config.SsnDecryptUrl);
         }
 
         [HttpPost]

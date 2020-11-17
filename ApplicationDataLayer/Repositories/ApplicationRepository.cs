@@ -126,7 +126,6 @@ namespace ApplicationWorkerDataLayer.Repositories
             }
         }
 
-
         // Save original application to log table
         public async Task<int> SaveClientOriginalApplication(string firstName, string lastName, string phoneNumber, string email, string ssn, string appJson)
         {
@@ -155,5 +154,7 @@ namespace ApplicationWorkerDataLayer.Repositories
                 throw ex;
             }
         }
+
+
     }
 }

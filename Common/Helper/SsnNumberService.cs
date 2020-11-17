@@ -1,8 +1,6 @@
 ﻿using Common.DTOs;
-using Common.DTOs.Configurations.ApplicationWorker;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,18 +9,19 @@ namespace Common.Helper
 {
     public class SsnNumberService
     {
-        public ApplicationProcessingConfig _config;         // ApplicationWorker configuration object
+        public string _ssnEncryptUrl = "";
+        public string _ssnDecryptUrl = "";
 
-        public SsnNumberService(ApplicationProcessingConfig config)
+        public SsnNumberService(string ssnEncryptUrl, string ssnDcryptUrl)
         {
-            _config = config;
+            _ssnEncryptUrl = ssnEncryptUrl;
+            _ssnDecryptUrl = ssnDcryptUrl;
         }
 
 
         public async Task<HttpGeneralResponse> EncryptSsn(string plainSsn)
         {
-            // _ppConfig
-            var serviceTokenURL = _config.SsnEncryptUrl;
+            var serviceTokenURL = _ssnEncryptUrl;
 
             var req = new
             {
@@ -74,7 +73,7 @@ namespace Common.Helper
         private async Task<HttpGeneralResponse> DecryptSsn(string ssnEncrypted)
         {
             // _ppConfig
-            var serviceTokenURL = _config.SsnDecryptUrl;
+            var serviceTokenURL = _ssnDecryptUrl;
 
             var req = new
             {

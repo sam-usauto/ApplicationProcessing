@@ -11,7 +11,6 @@ namespace ApplicationWorkerDataLayer.Interfaces
         Task<ClientApplicationLogIds> SaveApplicationToDB( (ShortApp application, int logId, int userID, int lotID) applicationAndLog );
         Task<IEnumerable<ApplicationFlowStep>> GetApplicationFlowSteps(int logID);
 
-
         //Task<HttpGeneralResponse> CreateFullScoringRequest(TrustScienceBatchItem trustScienceBatchItem);
         //Task<HttpGeneralResponse> GetScoringReport(string id);
         //Task<SaveCreateFullScoringToTableResp> SaveFullScroingInfo(TrustScienceScore trustScienceScore);

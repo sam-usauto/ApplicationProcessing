@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
+using System.Data.SqlClient;
 using System.Threading.Tasks;
+using ApplicationWorkerDataLayer.Interfaces;
 using Common.DTOs.Application;
-using Microsoft.AspNetCore.Http;
+using Common.DTOs.Configurations;
+using Common.DTOs.Configurations.ApplicationWorker;
+using Common.Helper;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ScoringSolutionMicroService.Controllers
@@ -14,6 +14,18 @@ namespace ScoringSolutionMicroService.Controllers
     [Route("[controller]")]
     public class ScoringSolutionController : Controller
     {
+        private readonly ScoringSolutionConfig _config;
+        private readonly IScoringSolutionRepository _scoringSolutionRepository;
+        private readonly SsnNumberService _ssnNumberService;
+
+        public ScoringSolutionController(ScoringSolutionConfig config, IScoringSolutionRepository scoringSolutionRepository)
+        {
+            _config = config;
+            _scoringSolutionRepository = scoringSolutionRepository;
+            _ssnNumberService = new SsnNumberService(_config.SsnEncryptUrl, _config.SsnDecryptUrl);
+        }
+
+
         [HttpPost]
         [Route("Execute")]
         //public async Task<HttpResponseMessage> Execute([FromBody] (int applicationID, int logId, int userID) appInfo )
@@ -22,6 +34,7 @@ namespace ScoringSolutionMicroService.Controllers
             try
             {
 
+                _scoringSolutionRepository.GetScoringSolutionApplication(appInfo.ApplicationID);
                 // Load ClientIP, Encrypt SS, save last 4 SSN etc.
                 //await PreprocessApplication(application);
 
