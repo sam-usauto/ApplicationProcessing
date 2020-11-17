@@ -1,0 +1,195 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://dvtransaction.com/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://dvtransaction.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+	<wsdl:types>
+		<s:schema elementFormDefault="qualified" targetNamespace="http://dvtransaction.com/">
+			<s:element name="Ping">
+				<s:complexType />
+			</s:element>
+			<s:element name="PingResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" maxOccurs="1" name="PingResult" type="s:string" />
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="LoadSystem">
+				<s:complexType />
+			</s:element>
+			<s:element name="LoadSystemResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" maxOccurs="1" name="LoadSystemResult" type="s:string" />
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="ProcessApplication">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" maxOccurs="1" name="XmlRequest" type="s:string" />
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="ProcessApplicationResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" maxOccurs="1" name="ProcessApplicationResult" type="s:string" />
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="ProcessApplicationXML">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" maxOccurs="1" name="XmlRequest">
+							<s:complexType>
+								<s:sequence>
+									<s:any />
+								</s:sequence>
+							</s:complexType>
+						</s:element>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="ProcessApplicationXMLResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" maxOccurs="1" name="ProcessApplicationXMLResult">
+							<s:complexType mixed="true">
+								<s:sequence>
+									<s:any />
+								</s:sequence>
+							</s:complexType>
+						</s:element>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+		</s:schema>
+	</wsdl:types>
+	<wsdl:message name="PingSoapIn">
+		<wsdl:part name="parameters" element="tns:Ping" />
+	</wsdl:message>
+	<wsdl:message name="PingSoapOut">
+		<wsdl:part name="parameters" element="tns:PingResponse" />
+	</wsdl:message>
+	<wsdl:message name="LoadSystemSoapIn">
+		<wsdl:part name="parameters" element="tns:LoadSystem" />
+	</wsdl:message>
+	<wsdl:message name="LoadSystemSoapOut">
+		<wsdl:part name="parameters" element="tns:LoadSystemResponse" />
+	</wsdl:message>
+	<wsdl:message name="ProcessApplicationSoapIn">
+		<wsdl:part name="parameters" element="tns:ProcessApplication" />
+	</wsdl:message>
+	<wsdl:message name="ProcessApplicationSoapOut">
+		<wsdl:part name="parameters" element="tns:ProcessApplicationResponse" />
+	</wsdl:message>
+	<wsdl:message name="ProcessApplicationXMLSoapIn">
+		<wsdl:part name="parameters" element="tns:ProcessApplicationXML" />
+	</wsdl:message>
+	<wsdl:message name="ProcessApplicationXMLSoapOut">
+		<wsdl:part name="parameters" element="tns:ProcessApplicationXMLResponse" />
+	</wsdl:message>
+	<wsdl:portType name="DataviewServiceSoap">
+		<wsdl:operation name="Ping">
+			<wsdl:input message="tns:PingSoapIn" />
+			<wsdl:output message="tns:PingSoapOut" />
+		</wsdl:operation>
+		<wsdl:operation name="LoadSystem">
+			<wsdl:input message="tns:LoadSystemSoapIn" />
+			<wsdl:output message="tns:LoadSystemSoapOut" />
+		</wsdl:operation>
+		<wsdl:operation name="ProcessApplication">
+			<wsdl:input message="tns:ProcessApplicationSoapIn" />
+			<wsdl:output message="tns:ProcessApplicationSoapOut" />
+		</wsdl:operation>
+		<wsdl:operation name="ProcessApplicationXML">
+			<wsdl:input message="tns:ProcessApplicationXMLSoapIn" />
+			<wsdl:output message="tns:ProcessApplicationXMLSoapOut" />
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="DataviewServiceSoap" type="tns:DataviewServiceSoap">
+		<soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="Ping">
+			<soap:operation soapAction="/Ping" style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="LoadSystem">
+			<soap:operation soapAction="http://dvtransaction.com/LoadSystem" style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ProcessApplication">
+			<soap:operation soapAction="http://dvtransaction.com/ProcessApplication" style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ProcessApplicationXML">
+			<soap:operation soapAction="http://dvtransaction.com/ProcessApplicationXML" style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:binding name="DataviewServiceSoap12" type="tns:DataviewServiceSoap">
+		<soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="Ping">
+			<soap12:operation soapAction="http://dvtransaction.com/Ping" style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="LoadSystem">
+			<soap12:operation soapAction="http://dvtransaction.com/LoadSystem" style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ProcessApplication">
+			<soap12:operation soapAction="http://dvtransaction.com/ProcessApplication" style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ProcessApplicationXML">
+			<soap12:operation soapAction="http://dvtransaction.com/ProcessApplicationXML" style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="DataviewService">
+		<wsdl:port name="DataviewServiceSoap" binding="tns:DataviewServiceSoap">
+			<soap:address location="https://dv360-prod.dataview360.com/usautosales/dataviewservice.asmx" />
+		</wsdl:port>
+		<wsdl:port name="DataviewServiceSoap12" binding="tns:DataviewServiceSoap12">
+			<soap12:address location="https://dv360-prod.dataview360.com/usautosales/dataviewservice.asmx" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

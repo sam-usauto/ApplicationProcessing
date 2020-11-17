@@ -1,0 +1,26 @@
+﻿        private void CalculateOtherIncome(SaveShortAppWrapper<ShortApp> application)
+        {
+            try
+            {
+                var app = application.Data;
+                var lookups = LookupCacher.GetLookups(); // get cached lookups 
+
+                if (app.OtherIncome.HasValue && app.OtherIncome == 0)
+                {
+                    app.OtherIncome = 0;
+                    return;
+                }
+
+                var lookupRepositories = new LookupRepositories();
+                var periodID = app.OtherIncomePayPeriodId ?? 0;
+                // get the multiplier
+                var netIncomeMultiplier = lookupRepositories.GetSalaryNetIncomeMultiplier(periodID);
+
+                var otherIncome = app.OtherIncome.Value * (decimal)(netIncomeMultiplier);
+                app.OtherIncome = otherIncome;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("exception In CalculateOtherIncome() in ApplicationController.cs", ex);
+            }
+        }
