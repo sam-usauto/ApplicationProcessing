@@ -7,15 +7,14 @@ namespace Common.DTOs.Application
     public class ScoringSolutionRequest
     {
         public string ModelId { get; set; }
-        public bool IsCoBuyer { get; set; }
-
-        public string CoBuyerCode => IsCoBuyer ? "01" : "00";
-        public int ApplicationID { get; set; }
+        public string CoBuyerCode { get; set; }
+        public string ApplicationID { get; set; }
         public string PaymentIncome { get; set; }
-        public string CustomerFirstName { get; set; }
-        public string CustomerLastName { get; set; }
-        public string CustomerMiddleName { get; set; }
-        public string CustomerSSN { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string MiddleName { get; set; }
+        public string EncryptedSsn { get; set; }
+        public string Ssn { get; set; }
         public string HouseNumber { get; set; }
         public string QuadRant { get; set; }
         public string StreetName { get; set; }
@@ -23,27 +22,18 @@ namespace Common.DTOs.Application
         public string City { get; set; }
         public string StateAbbreviation { get; set; }
         public string PostalCode { get; set; }
-        public DateTime DateModified { get; set; }
-
-        public string DateModifiedFormatted => DateModified.ToString("yyyyddMM");
-
-        public int MonthsCurrentJob { get; set; }
-        public int? MonthsPreviousJob { get; set; }
+        public string DateModified { get; set; }
+        public string MonthsCurrentJob { get; set; }
+        public string MonthsPreviousJob { get; set; }
+        // TODO: What is that field
         public string CustomerSuffixTypeValue { get; set; }
-        public int MonthsCurrentResidence { get; set; }
-        public int? MonthsPreviousResidence { get; set; }
+        public string MonthsCurrentResidence { get; set; }
+        public string MonthsPreviousResidence { get; set; }
         public string HousingTypeName { get; set; }
-        public decimal NetIncome { get; set; }
-        public decimal? HousingPayment { get; set; }
-
+        public string NetIncome { get; set; }
+        public string HousingPayment { get; set; }
+        public string PeriodPaycheck { get; set; }
+        public string OtherIncome { get; set; }
         public string EquifaxRawData { get; set; }
-
-        // not sure about the field bellow [Sam]
-        public int? bureau { get; set; }
-
-        public decimal? PeriodPaycheck { get; set; }
-        public int SalaryTypeID { get; set; }
-        public decimal? OtherIncome { get; set; }
-
     }
 }

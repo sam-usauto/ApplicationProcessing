@@ -33,11 +33,20 @@ namespace ScoringSolutionMicroService.Controllers
         {
             try
             {
+                // collect all the data needed by Scoring Solution for scoring request
+                var app = await _scoringSolutionRepository.GetScoringSolutionApplication(appInfo.ApplicationID);
 
-                _scoringSolutionRepository.GetScoringSolutionApplication(appInfo.ApplicationID);
+                // call the SSN decryption
+                if (String.IsNullOrEmpty(app.EncryptedSsn) == false)
+                {
+                    var ssnResp = await _ssnNumberService.UnprotectSsn(app.EncryptedSsn);
+                    var unprotectedSsn = ssnResp.ResponseData;
+                    app.Ssn = unprotectedSsn;
+                }
+
                 // Load ClientIP, Encrypt SS, save last 4 SSN etc.
                 //await PreprocessApplication(application);
-
+                var x = 1;
 
 
                 // save original plain application to log and the Log entry id to class provate

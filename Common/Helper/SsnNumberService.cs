@@ -19,7 +19,7 @@ namespace Common.Helper
         }
 
 
-        public async Task<HttpGeneralResponse> EncryptSsn(string plainSsn)
+        public async Task<HttpGeneralResponse> ProtectSsn(string plainSsn)
         {
             var serviceTokenURL = _ssnEncryptUrl;
 
@@ -70,7 +70,7 @@ namespace Common.Helper
             return httpGeneralResponse;
         }
 
-        private async Task<HttpGeneralResponse> DecryptSsn(string ssnEncrypted)
+        public async Task<HttpGeneralResponse> UnprotectSsn(string ssnEncrypted)
         {
             // _ppConfig
             var serviceTokenURL = _ssnDecryptUrl;

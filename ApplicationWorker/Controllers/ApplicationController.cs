@@ -170,7 +170,7 @@ namespace ApplicationWorker.Controllers
             // call the SSN decryption
             if (String.IsNullOrEmpty(ssnPlain) == false)
             {
-                var ssnResp = await _ssnNumberService.EncryptSsn(ssnPlain);
+                var ssnResp = await _ssnNumberService.ProtectSsn(ssnPlain);
                 encryptedSSN = ssnResp.ResponseData;
             }
 
