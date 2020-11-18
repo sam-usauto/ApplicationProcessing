@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace ApplicationProcessing.Service.PointPredictiveService.DTOs
 {
-    public class AppRequest
+    public class UsAutoApp
     {
         public string InterfaceVersion { get; set; }
         public string AccountIdentifier { get; set; }

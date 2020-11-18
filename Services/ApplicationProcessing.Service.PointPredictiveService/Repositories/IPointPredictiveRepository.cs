@@ -9,6 +9,6 @@ namespace ApplicationProcessing.Service.PointPredictiveService.Repositories
     public interface IPointPredictiveRepository
     {
 
-        Task<AppRequest> GetApplicationDetailsByAppIdAsync(int applicationId, int cmdTimeOut);
+        Task<UsAutoApp> GetApplicationDetailsByAppIdAsync(int applicationId, int cmdTimeOut);
     }
 }

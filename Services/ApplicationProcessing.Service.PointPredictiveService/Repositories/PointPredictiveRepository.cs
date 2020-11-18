@@ -33,7 +33,7 @@ namespace ApplicationProcessing.Service.PointPredictiveService.Repositories
         }
 
 
-        public async Task<AppRequest> GetApplicationDetailsByAppIdAsync(int applicationId, int cmdTimeOut)
+        public async Task<UsAutoApp> GetApplicationDetailsByAppIdAsync(int applicationId, int cmdTimeOut)
         {
             try
             {
@@ -42,7 +42,7 @@ namespace ApplicationProcessing.Service.PointPredictiveService.Repositories
                     var queryParameters = new DynamicParameters();
                     queryParameters.Add("@ApplicationID", applicationId);
 
-                    var app = await conn.QueryFirstOrDefaultAsync<AppRequest>(
+                    var app = await conn.QueryFirstOrDefaultAsync<UsAutoApp>(
                                  "[pp].[GetApplicationByAppID]",
                                  queryParameters,
                                  transaction: null,
