@@ -216,5 +216,21 @@ namespace ApplicationProcessing.Service.PointPredictiveService.Repositories
                 }
             }
         }
+
+        public async Task<int> UpdateAutoScoreToCompleted(int Id)
+        {
+            try
+            {
+                string sqlCmd = $"UPDATE PP_AutoRun SET IsSuccessful = 1 WHERE Id = {Id};";
+                using (var conn = new SqlConnection(_scoringDbConn))
+                {
+                    return await conn.ExecuteAsync(sqlCmd);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

@@ -9,7 +9,7 @@ namespace ApplicationProcessing.Service.PointPredictiveService.Repositories
 {
     public interface IPointPredictiveRepository
     {
-
+        Task<int> UpdateAutoScoreToCompleted(int Id);
         Task<UsAutoApp> GetApplicationDetailsByAppIdAsync(int applicationId, int cmdTimeOut);
         Task<SavePointPredictiveResp> SavePointPredictiveScoreAsync(
                              PointPredictiveReportResp pointPredictiveReportResp,

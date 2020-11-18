@@ -100,15 +100,51 @@ namespace ApplicationProcessing.Service.PointPredictiveService.Controllers
                                         ""
                                         );
 
-                // TODO:  Fix
-                // change the status of the item in thae table PP_AutoRun so it will not run again
-                //if (pointPredictiveReportResp.HttpRespone.IsSuccessStatusCode && saveResp.Completed)
+                //  got some errors from PP Server
+                if(saveResp.Exception != null)
+                {
+                    var shortResp = new ShortPointPredictiveReportResp();
+                    shortResp.IsSuccessStatusCode = false;
+                    shortResp.Errors = $"Error Code#: {saveResp.NewSaveId}";
+                    return Ok(shortResp);
+                }
+
+                //// get the PP status to be diplayed to the user
+                //var pointPredictiveLastScore = await _ppService.GetPointPredictiveLastScoreAsync(creditId);
+
+                //// TODO
+                //// Test if reponse contains errors
+
+                //// load PP status info
+                //pointPredictiveReportResp.PointPredictiveScoreResp.UWStatusId = pointPredictiveLastScore.UWStatusId;
+                //pointPredictiveReportResp.PointPredictiveScoreResp.Status = pointPredictiveLastScore.Status;
+                //pointPredictiveReportResp.PointPredictiveScoreResp.DaysSinceLastCall = pointPredictiveLastScore.DaysSinceLastCall;
+
+                //// save the entry GUID for easy access on the screen
+                //pointPredictiveReportResp.SavedReqRespID = saveResp.NewSaveId;
+                //// save the score for easy access on the screen
+                //pointPredictiveReportResp.FraudScore =
+                //        pointPredictiveReportResp.PointPredictiveScoreResp.Application_fraud_information.fraud_score;
+
+                //// send short response
+                //var shortPointPredictiveReportResp = MapRespToShortResp(pointPredictiveReportResp);
+
+
+                ////Response.Headers.Add("access-control-allow-origin", "*");
+
+                //if (_underwritingConfiguration.ReturnShortResp == true)
                 //{
-                //    await _ppService.UpdateAutoScoreToCompleted(ppAutoScore.ID);
-                //    totalProcessedItems += 1;
+                //    // return short results
+                //    return Ok(shortPointPredictiveReportResp);
+                //}
+                //else
+                //{
+                //    // return full results
+                //    return Ok(pointPredictiveReportResp);
                 //}
 
-                return Ok(saveResp);
+
+            return Ok(saveResp);
             }
             catch (SqlException ex)
             {
