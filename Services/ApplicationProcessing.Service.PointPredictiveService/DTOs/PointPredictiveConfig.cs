@@ -15,6 +15,10 @@ namespace ApplicationProcessing.Service.PointPredictiveService.DTOs
 
         public SqlConnectionStrings ConnectionStringsPROD { get; set; }
 
+        public PointPredictiveConfigSection PointPredictiveConfigsUAT { get; set; }
+
+        public PointPredictiveConfigSection PointPredictiveConfigsPROD { get; set; }
+        
         public string SsnDecryptUrl { get; set; }
 
         public string SsnEncryptUrl { get; set; }

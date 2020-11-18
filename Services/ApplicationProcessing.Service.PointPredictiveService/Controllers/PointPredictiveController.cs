@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using ApplicationProcessing.Service.PointPredictiveService.DTOs;
 using ApplicationProcessing.Service.PointPredictiveService.DTOs.PointPredictive;
 using ApplicationProcessing.Service.PointPredictiveService.Repositories;
+using ApplicationProcessing.Service.PointPredictiveService.Services;
 using Common.DTOs.Application;
 //using ApplicationWorkerDataLayer.Interfaces;
 //using Common.DTOs.Application;
@@ -22,6 +23,8 @@ namespace ApplicationProcessing.Service.PointPredictiveService.Controllers
         private readonly string _lastUpdated = "11/18/2020";
 
         private readonly PointPredictiveConfig _config;
+        private readonly IPointPredictiveService _pointPredictiveService;
+
         private readonly IPointPredictiveRepository _pointPredictiveRepository;
         private readonly SsnNumberService _ssnNumberService;
 
@@ -29,12 +32,15 @@ namespace ApplicationProcessing.Service.PointPredictiveService.Controllers
 
         private int _dapperTimeOut = 90;
 
-        public PointPredictiveController(PointPredictiveConfig config, IPointPredictiveRepository pointPredictiveRepository)
+        public PointPredictiveController(PointPredictiveConfig config, 
+                                            IPointPredictiveRepository pointPredictiveRepository,
+                                            IPointPredictiveService pointPredictiveService)
         {
             _config = config;
             _pointPredictiveRepository = pointPredictiveRepository;
             _ssnNumberService = new SsnNumberService(_config.SsnEncryptUrl, _config.SsnDecryptUrl);
             _dapperTimeOut = _config.DapperDefaultTimeOut;
+            _pointPredictiveService = pointPredictiveService;
         }
 
         [HttpPost]
@@ -51,7 +57,7 @@ namespace ApplicationProcessing.Service.PointPredictiveService.Controllers
 
                 if (app == null)
                 {
-                    return BadRequest("Failed collecting application by applicationId");
+                    return BadRequest("Failed collecting application information by applicationId");
                 }
 
                 // call the SSN decryption
@@ -78,6 +84,11 @@ namespace ApplicationProcessing.Service.PointPredictiveService.Controllers
                     alternate_fields = applicationInput.AlternateFields,
                     user_defined_fields = applicationInput.UserDefinedFields
                 };
+
+                PointPredictiveReportResp pointPredictiveReportResp = await _pointPredictiveService.GetPointPredictiveScoreAsync(pointPredictiveScoreReq);
+
+                // the request after cleaning emply fields
+                var cleanReq = _pointPredictiveService.JsonRemoveEmptyProperties(pointPredictiveScoreReq).Replace("'", "''");
 
 
                 return Ok(pointPredictiveScoreReq);

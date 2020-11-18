@@ -8,7 +8,7 @@ namespace ApplicationProcessing.Service.PointPredictiveService.Services
 {
     public interface IPointPredictiveService
     {
-
+        string JsonRemoveEmptyProperties(PointPredictiveScoreReq pointPredictiveScoreReq);
         Task<PointPredictiveReportResp> GetPointPredictiveScoreAsync(PointPredictiveScoreReq pointPredictiveScoreReq);
     }
 }

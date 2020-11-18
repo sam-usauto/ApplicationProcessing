@@ -64,5 +64,5 @@ namespace ApplicationProcessing.Service.PointPredictiveService.DTOs.PointPredict
         public string dealer_risk_report_link { get; set; }
         public string fraud_epd_report_link { get; set; }
     }
-}
+
 }

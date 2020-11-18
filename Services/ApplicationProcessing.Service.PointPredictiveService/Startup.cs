@@ -3,6 +3,7 @@
 //using Common.DTOs.Configurations;
 using ApplicationProcessing.Service.PointPredictiveService.DTOs;
 using ApplicationProcessing.Service.PointPredictiveService.Repositories;
+using ApplicationProcessing.Service.PointPredictiveService.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -37,6 +38,9 @@ namespace ApplicationProcessing.Service.PointPredictiveService
             services.AddSingleton(config);      // add config to the injection manager
 
             services.AddTransient<IPointPredictiveRepository, PointPredictiveRepository>();     // add ScoringSolutionRepository to the injection manager
+
+            services.AddTransient<IPointPredictiveService, ApplicationProcessing.Service.PointPredictiveService.Services.PointPredictiveService>();
+            
 
             services.AddControllers();
         }
