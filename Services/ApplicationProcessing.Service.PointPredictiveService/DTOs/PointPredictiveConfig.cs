@@ -18,5 +18,8 @@ namespace ApplicationProcessing.Service.PointPredictiveService.DTOs
         public string SsnDecryptUrl { get; set; }
 
         public string SsnEncryptUrl { get; set; }
+
+        public int DapperDefaultTimeOut { get; set; }
+
     }
 }

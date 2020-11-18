@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ApplicationProcessing.Service.PointPredictiveService.DTOs
+namespace ApplicationProcessing.Service.PointPredictiveService.Services
 {
     interface IPointPredictiveService
     {

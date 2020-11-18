@@ -26,11 +26,14 @@ namespace ApplicationProcessing.Service.PointPredictiveService.Controllers
 
         private ApplicationStepInput _applicationStepInput = null;
 
+        private int _dapperTimeOut = 90;
+
         public PointPredictiveController(PointPredictiveConfig config, IPointPredictiveRepository pointPredictiveRepository)
         {
             _config = config;
             _pointPredictiveRepository = pointPredictiveRepository;
             _ssnNumberService = new SsnNumberService(_config.SsnEncryptUrl, _config.SsnDecryptUrl);
+            _dapperTimeOut = _config.DapperDefaultTimeOut;
         }
 
         [HttpPost]
@@ -42,37 +45,26 @@ namespace ApplicationProcessing.Service.PointPredictiveService.Controllers
             {
                 _applicationStepInput = appInfo;
 
-                // collect all the data needed by Scoring Solution for scoring request
-                //var app = await _scoringSolutionRepository.GetScoringSolutionApplication(appInfo.ApplicationID);
+                // collect all the data needed by Point Predictive for the request
+                var app = await _pointPredictiveRepository.GetApplicationDetailsByAppIdAsync(appInfo.ApplicationID, _dapperTimeOut);
+
+                if (app == null)
+                {
+                    return BadRequest("Failed collecting application by applicationId");
+                }
 
                 // call the SSN decryption
-                //if (String.IsNullOrEmpty(app.EncryptedSsn) == false)
-                //{
-                //    var ssnResp = await _ssnNumberService.UnprotectSsn(app.EncryptedSsn);
-                //    var unprotectedSsn = ssnResp.ResponseData;
-                //    app.Ssn = unprotectedSsn;
-                //}
+                if (String.IsNullOrEmpty(app.SSN) == false)
+                {
+                    var ssnResp = await _ssnNumberService.UnprotectSsn(app.SSN);
+                    var unprotectedSsn = ssnResp.ResponseData;
+                    app.SSN = unprotectedSsn;
+                }
 
-                // Load ClientIP, Encrypt SS, save last 4 SSN etc.
-                //await PreprocessApplication(application);
-                var x = 1;
+                // make sure data is clean
+                CleanApp(app);
 
-
-                // save original plain application to log and the Log entry id to class provate
-                //_applicationLogID = await LogInitApplication(application);
-
-                // Tuples
-                //(ShortApp app, int logId, int _userID, int _lotID) appData = (application.Data, _applicationLogID, _userID, _lotID);
-
-                // return the Ids of all the inserted tables related to the application
-                //var SaveToDbResult = await _applicationRepository.SaveApplicationToDB(appData);
-
-                // process the Application flow steps
-                //await ExecuteApplicationProcessing(application.Data);
-                await Task.FromResult(1);
-
-                //return new HttpResponseMessage(HttpStatusCode.OK);
-                return Ok("ScoringSolution.Execute()");
+                return Ok(app);
             }
             catch (SqlException ex)
             {
@@ -84,6 +76,21 @@ namespace ApplicationProcessing.Service.PointPredictiveService.Controllers
                 throw ex;
                 //return new HttpResponseMessage(HttpStatusCode.BadRequest);
             }
+        }
+
+        private void CleanApp(AppRequest app)
+        {
+            // sometime we are getting spaces in the phone number..
+            // needed to remove... can not convert to number
+            app.CellPhoneNumber = app.CellPhoneNumber.Replace(" ", "");
+            app.HomePhoneNumber = app.HomePhoneNumber.Replace(" ", "");
+            app.WorkPhoneNumber = app.WorkPhoneNumber.Replace(" ", "");
+            app.CobCellPhoneNumber = app.CobCellPhoneNumber.Replace(" ", "");
+            app.CobHomePhoneNumber = app.CobHomePhoneNumber.Replace(" ", "");
+            app.CobWorkPhoneNumber = app.CobWorkPhoneNumber.Replace(" ", "");
+            app.EmployerPhone = app.EmployerPhone.Replace(" ", "");
+            // "-999999" => empty date
+            app.CustomerSinceDate = String.IsNullOrEmpty(app.CustomerSinceDate) ? "-999999" : app.CustomerSinceDate;
         }
 
         [HttpGet]
