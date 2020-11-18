@@ -1,6 +1,8 @@
-using ApplicationWorkerDataLayer.Interfaces;
-using ApplicationWorkerDataLayer.Repositories;
-using Common.DTOs.Configurations;
+//using ApplicationWorkerDataLayer.Interfaces;
+//using ApplicationWorkerDataLayer.Repositories;
+//using Common.DTOs.Configurations;
+using ApplicationProcessing.Service.PointPredictiveService.DTOs;
+using ApplicationProcessing.Service.PointPredictiveService.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -8,10 +10,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Linq;
 
-namespace PointPredictiveMicroservice
+namespace ApplicationProcessing.Service.PointPredictiveService
 {
     public class Startup
     {
+
         private string _corsList = string.Empty;
 
         public Startup(IConfiguration configuration)
@@ -24,7 +27,7 @@ namespace PointPredictiveMicroservice
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var config = new ScoringSolutionConfig();
+            var config = new PointPredictiveConfig();
             Configuration.Bind("PointPredictive", config);      //  Bind "ScoringSolutionConfig" Object to "PointPredictive" config section
 
             // save the list of CORS sites to property.. 
@@ -45,7 +48,6 @@ namespace PointPredictiveMicroservice
             {
                 app.UseDeveloperExceptionPage();
             }
-
 
             // Note:
             // converting list Cors list to array enable list of Cors to work

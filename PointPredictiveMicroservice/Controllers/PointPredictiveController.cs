@@ -8,25 +8,25 @@ using Common.DTOs.Configurations.ApplicationWorker;
 using Common.Helper;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ScoringSolutionMicroService.Controllers
+namespace PointPredictiveMicroService.Controllers
 {
+
     [ApiController]
     [Route("[controller]")]
-    public class ScoringSolutionController : Controller
+    public class PointPredictiveController : Controller
     {
-        private readonly ScoringSolutionConfig _config;
-        private readonly IScoringSolutionRepository _scoringSolutionRepository;
+        private readonly PointPredictiveConfig _config;
+        private readonly IPointPredictiveRepository _pointPredictiveRepository;
         private readonly SsnNumberService _ssnNumberService;
 
         private ApplicationStepInput _applicationStepInput = null;
 
-        public ScoringSolutionController(ScoringSolutionConfig config, IScoringSolutionRepository scoringSolutionRepository)
+        public PointPredictiveController(PointPredictiveConfig config, IPointPredictiveRepository pointPredictiveRepository)
         {
             _config = config;
-            _scoringSolutionRepository = scoringSolutionRepository;
+            _pointPredictiveRepository = pointPredictiveRepository;
             _ssnNumberService = new SsnNumberService(_config.SsnEncryptUrl, _config.SsnDecryptUrl);
         }
-
 
         [HttpPost]
         [Route("Execute")]
@@ -38,15 +38,15 @@ namespace ScoringSolutionMicroService.Controllers
                 _applicationStepInput = appInfo;
 
                 // collect all the data needed by Scoring Solution for scoring request
-                var app = await _scoringSolutionRepository.GetScoringSolutionApplication(appInfo.ApplicationID);
+                //var app = await _scoringSolutionRepository.GetScoringSolutionApplication(appInfo.ApplicationID);
 
                 // call the SSN decryption
-                if (String.IsNullOrEmpty(app.EncryptedSsn) == false)
-                {
-                    var ssnResp = await _ssnNumberService.UnprotectSsn(app.EncryptedSsn);
-                    var unprotectedSsn = ssnResp.ResponseData;
-                    app.Ssn = unprotectedSsn;
-                }
+                //if (String.IsNullOrEmpty(app.EncryptedSsn) == false)
+                //{
+                //    var ssnResp = await _ssnNumberService.UnprotectSsn(app.EncryptedSsn);
+                //    var unprotectedSsn = ssnResp.ResponseData;
+                //    app.Ssn = unprotectedSsn;
+                //}
 
                 // Load ClientIP, Encrypt SS, save last 4 SSN etc.
                 //await PreprocessApplication(application);
@@ -80,7 +80,5 @@ namespace ScoringSolutionMicroService.Controllers
                 //return new HttpResponseMessage(HttpStatusCode.BadRequest);
             }
         }
-
-
     }
 }

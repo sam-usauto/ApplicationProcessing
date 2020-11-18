@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ApplicationDataLayer\ApplicationWorkerDataLayer.csproj" />
-    <ProjectReference Include="..\Common\Common.csproj" />
+    <Folder Include="Repositories\" />
+    <Folder Include="DTOs\" />
   </ItemGroup>
 
 

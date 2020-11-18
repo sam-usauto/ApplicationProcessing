@@ -6,6 +6,8 @@ namespace Common.DTOs.Application
 {
     public class ScoringSolutionRequest
     {
+        //TODO: Varify that we getting the correct data... Do we have to calculate the Montly payment? Which payment is what field
+
         public string ModelId { get; set; }
         public string CoBuyerCode { get; set; }
         public string ApplicationID { get; set; }
