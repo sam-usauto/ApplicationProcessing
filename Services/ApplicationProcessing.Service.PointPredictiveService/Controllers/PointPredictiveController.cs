@@ -90,8 +90,25 @@ namespace ApplicationProcessing.Service.PointPredictiveService.Controllers
                 // the request after cleaning emply fields
                 var cleanReq = _pointPredictiveService.JsonRemoveEmptyProperties(pointPredictiveScoreReq).Replace("'", "''");
 
+                var saveResp = await _pointPredictiveRepository.SavePointPredictiveScoreAsync(
+                                        pointPredictiveReportResp,
+                                        pointPredictiveScoreReq,
+                                        app,
+                                        "USAUTOSALES\\Sam Aloni",
+                                        cleanReq,
+                                        _applicationStepInput.ApplicationID,
+                                        ""
+                                        );
 
-                return Ok(pointPredictiveScoreReq);
+                // TODO:  Fix
+                // change the status of the item in thae table PP_AutoRun so it will not run again
+                //if (pointPredictiveReportResp.HttpRespone.IsSuccessStatusCode && saveResp.Completed)
+                //{
+                //    await _ppService.UpdateAutoScoreToCompleted(ppAutoScore.ID);
+                //    totalProcessedItems += 1;
+                //}
+
+                return Ok(saveResp);
             }
             catch (SqlException ex)
             {
