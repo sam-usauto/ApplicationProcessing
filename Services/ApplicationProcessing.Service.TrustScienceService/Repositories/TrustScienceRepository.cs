@@ -1,5 +1,6 @@
 ﻿using ApplicationProcessing.Service.TrustScienceService.DTOs;
 using ApplicationProcessing.Service.TrustScienceService.DTOs.Configuration;
+using Common.DTOs.Application;
 using Dapper;
 using System;
 using System.Collections.Generic;
@@ -43,10 +44,16 @@ namespace ApplicationProcessing.Service.ScoringSolution.Repositories
                 {
                     var queryParameters = new DynamicParameters();
                     queryParameters.Add("@ApplicationID", applicationID);
-                    var result = await conn.QueryFirstAsync<TrustScienceBatchItem>(
+                    var result = await conn.QueryFirstOrDefaultAsync<TrustScienceBatchItem>(
                                     "[trustScience].[GetApplicationDetail]",
                                     queryParameters,
                                     commandType: CommandType.StoredProcedure);
+
+                    // if missing application scoreModal
+                    if(result == null)
+                    {
+                        throw new Exception($"TrustScienceRepository.GetFullApplicationByID did not returned application ({applicationID})");
+                    }
 
                     // caluclate the nonNormalizedIncome
                     queryParameters = new DynamicParameters();
@@ -67,6 +74,29 @@ namespace ApplicationProcessing.Service.ScoringSolution.Repositories
             }
         }
 
+        public async Task ReqSaveRespToLog(string req, string resp, ApplicationStepInput appInfo, int which = 1)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(_scoringDbConn))
+                {
+                    var queryParameters = new DynamicParameters();
+                    queryParameters.Add("@ApplicationFlowStepResultID", appInfo.ApplicationFlowStepResultID);
+                    queryParameters.Add("@Req", req);
+                    queryParameters.Add("@Resp", resp);
+                    queryParameters.Add("@Which", which);
 
+                    var result = await conn.ExecuteAsync(
+                                    "[trustScience].[SaveReqRespToLog]",
+                                    queryParameters,
+                                    commandType: CommandType.StoredProcedure);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
     }
 }

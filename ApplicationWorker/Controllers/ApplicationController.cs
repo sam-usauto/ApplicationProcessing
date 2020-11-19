@@ -23,6 +23,8 @@ namespace ApplicationWorker.Controllers
     [Route("[controller]")]
     public class ApplicationController : ControllerBase
     {
+        private readonly string _version = "1.0.0";
+        private readonly string _lastUpdated = "11/18/2020";
 
         private readonly ApplicationProcessingConfig _config;
         private readonly IApplicationRepository _applicationRepository;
@@ -83,9 +85,15 @@ namespace ApplicationWorker.Controllers
             }
         }
 
-        //private async Task<(ShortApp app, int logId, int _userID, int _lotID)> LogInitApplication(SaveShortAppWrapper application)
-        // Tuples
-        //(ShortApp app, int logId, int _userID, int _lotID) appData = (application.Data, _applicationLogID, _userID, _lotID);
+
+        [HttpGet]
+        [Route("Info")]
+        public IActionResult Info()
+        {
+            return Ok($"Application Service - Version: {_version} Last Updated On: {_lastUpdated}.");
+        }
+
+        #region Private methods
 
         // execute the Processing application steps
         private async Task ExecuteApplicationProcessing(ShortApp shortApp)
@@ -110,6 +118,7 @@ namespace ApplicationWorker.Controllers
             }
 
         }
+
         // log the application into [logs].[ClientApplication] table
         private async Task<IEnumerable<ApplicationFlowStep>> GetApplicationFlowSteps(int logID)
         {
@@ -177,27 +186,11 @@ namespace ApplicationWorker.Controllers
             application.Data.Ssn = encryptedSSN;
         }
 
-
-
-        [HttpGet]
-        [Route("config")]
-        public IActionResult Config()
-        {
-            // TODO - mask the connection string and change the "//" to "/" in the locations
-            return Ok(_config);
-        }
-
-        [HttpGet("version")]
-        public string Version()
-        {
-            return "Version 1.0.0";
-        }
-
         // get last 4 digit from SSN
         private string GetLast4Ssn(string ssn)
         {
             ssn = ssn.Trim();
-            if(string.IsNullOrEmpty(ssn) || ssn.Length < 4)
+            if (string.IsNullOrEmpty(ssn) || ssn.Length < 4)
             {
                 return "Err";
             }
@@ -212,38 +205,8 @@ namespace ApplicationWorker.Controllers
             return remoteIpAddress.ToString();
         }
 
+        #endregion
 
 
-        // GET: api/<ApplicationController>
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET api/<ApplicationController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/<ApplicationController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
-        // PUT api/<ApplicationController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<ApplicationController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
     }
 }

@@ -49,8 +49,23 @@ namespace ApplicationProcessing.Service.TrustScienceService.Controllers
                 // get application detail
                 var trustScienceBatchItem = await _trustScienceRepository.GetFullApplicationByID(appInfo.ApplicationID);
 
+                // call the SSN decryption
+                if (String.IsNullOrEmpty(trustScienceBatchItem.SSN) == false)
+                {
+                    var ssnResp = await _ssnNumberService.UnprotectSsn(trustScienceBatchItem.SSN);
+                    var unprotectedSsn = ssnResp.ResponseData;
+                    trustScienceBatchItem.SSN = unprotectedSsn;
+                }
+
                 // create request data to match Trust Science format
-                var createFullScoringResp = await _trustScienceService.CreateFullScoringRequest(trustScienceBatchItem);
+                var createFullScoringResp = await _trustScienceService.CreateFullScoringRequest(trustScienceBatchItem, appInfo);
+
+                // Save req/Resp to log table  [logs].[ApplicationFlowStepResult]
+                await _trustScienceRepository.ReqSaveRespToLog(
+                                                                createFullScoringResp.RequestData, 
+                                                                createFullScoringResp.ResponseData,
+                                                                appInfo
+                                                                );
 
                 return Ok(trustScienceBatchItem);
             }

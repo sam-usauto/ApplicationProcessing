@@ -2,6 +2,7 @@
 using ApplicationProcessing.Service.TrustScienceService.DTOs.Configuration;
 using ApplicationProcessing.Service.TrustScienceService.DTOs.Request;
 using Common.DTOs;
+using Common.DTOs.Application;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -51,21 +52,16 @@ namespace ApplicationProcessing.Service.TrustScienceService.Services
             }
         }
 
-        public async Task<HttpGeneralResponse> CreateFullScoringRequest(TrustScienceBatchItem item)
+        public async Task<HttpGeneralResponse> CreateFullScoringRequest(TrustScienceBatchItem item, ApplicationStepInput appInfo)
         {
             try
             {
-                // call the SSN decryption
-                //if (String.IsNullOrEmpty(item.SSN) == false)
-                //{
-                //    var ssnResp = await DecryptSsn(item.SSN);
-                //    item.SSN = ssnResp.ResponseData;
-                //}
-
                 // convert TrustScienceBatchItem to CreateFullScoringRequest
                 var reqObject = MapInputToCreateFullScoringRequest(item);
 
-                var trustScienceResp = await SendCreateFullScoringRequest(reqObject, item);
+                var trustScienceResp = await SendCreateFullScoringRequest(reqObject, item, appInfo);
+
+
 
                 return trustScienceResp;
             }
@@ -78,7 +74,7 @@ namespace ApplicationProcessing.Service.TrustScienceService.Services
 
         // Post Full Scoring request
         // remove all fields with no values
-        private async Task<HttpGeneralResponse> SendCreateFullScoringRequest(CreateFullScoringRequest reqData, TrustScienceBatchItem item)
+        private async Task<HttpGeneralResponse> SendCreateFullScoringRequest(CreateFullScoringRequest reqData, TrustScienceBatchItem item, ApplicationStepInput appInfo)
         {
             try
             {
@@ -413,7 +409,9 @@ namespace ApplicationProcessing.Service.TrustScienceService.Services
                 return phone;
             }
             return "+1" + phone;
-        } 
+        }
+
+
 
         #endregion
 
