@@ -5,8 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Repositories\" />
-    <Folder Include="DTOs\" />
+    <ProjectReference Include="..\..\..\ApplicationProcessinServices\ApplicationProcessing.Service.ScoringSolution\ApplicationProcessing.Service.ScoringSolution.csproj" />
   </ItemGroup>
 
 

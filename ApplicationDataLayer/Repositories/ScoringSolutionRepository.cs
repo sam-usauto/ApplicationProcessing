@@ -1,4 +1,5 @@
-﻿using ApplicationWorkerDataLayer.Interfaces;
+﻿using ApplicationProcessing.Service.ScoringSolution.DTOs.Configuration;
+using ApplicationWorkerDataLayer.Interfaces;
 using Common.DTOs.Application;
 using Common.DTOs.Configurations;
 using Dapper;
@@ -13,12 +14,12 @@ namespace ApplicationWorkerDataLayer.Repositories
 {
     public class ScoringSolutionRepository : IScoringSolutionRepository
     {
-        public ScoringSolutionConfig _config;               // ApplicationWorker configuration object
+        public ScoringSolutionConfiguration _config;               // ApplicationWorker configuration object
         bool _production = false;                           // Is Production?... read from appSettings.json
         string _scoringDbConn = string.Empty;               // SQL connection string...  Depended on IsProduction setting
 
 
-        public ScoringSolutionRepository(ScoringSolutionConfig config)
+        public ScoringSolutionRepository(ScoringSolutionConfiguration config)
         {
             _config = config;
             _production = _config.IsProduction;

@@ -10,6 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\ApplicationProcessinServices\ApplicationProcessing.Service.ScoringSolution\ApplicationProcessing.Service.ScoringSolution.csproj" />
     <ProjectReference Include="..\Common\Common.csproj" />
   </ItemGroup>
 
