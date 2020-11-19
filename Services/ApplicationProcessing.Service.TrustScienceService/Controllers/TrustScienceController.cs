@@ -65,7 +65,7 @@ namespace ApplicationProcessing.Service.TrustScienceService.Controllers
         [Route("Info")]
         public IActionResult Info()
         {
-            return Ok($"Trust Science Service: Version: {_version} Last Updated On: {_lastUpdated}.");
+            return Ok($"Trust Science Service - Version: {_version} Last Updated On: {_lastUpdated}.");
         }
     }
 }

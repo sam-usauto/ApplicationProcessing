@@ -9,7 +9,6 @@ namespace ApplicationProcessing.Service.TrustScienceService.DTOs.Configuration
     {
         public bool IsProduction { get; set; }
         public string CorsList { get; set; }
-        public bool ReturnShortResp { get; set; }
 
         public SqlConnectionStrings ConnectionStringsUAT { get; set; }
         public SqlConnectionStrings ConnectionStringsPROD { get; set; }
@@ -18,8 +17,6 @@ namespace ApplicationProcessing.Service.TrustScienceService.DTOs.Configuration
         public TrustScienceSection TrustScienceConfigsPROD { get; set; }
 
         public int DapperDefaultTimeOut { get; set; }
-
-        public int ReportGetRetryDelay { get; set; }
 
         public string SsnDecryptUrl { get; set; }
         public string SsnEncryptUrl { get; set; }

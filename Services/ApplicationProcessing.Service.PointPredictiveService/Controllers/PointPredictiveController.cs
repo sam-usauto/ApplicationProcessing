@@ -165,7 +165,7 @@ namespace ApplicationProcessing.Service.PointPredictiveService.Controllers
         //public async Task<HttpResponseMessage> Execute([FromBody] (int applicationID, int logId, int userID) appInfo )
         public IActionResult Info()
         {
-            return Ok($"Point Predictive Service: Version: {_version} Last Updated On: {_lastUpdated}.");
+            return Ok($"Point Predictive Service - Version: {_version} Last Updated On: {_lastUpdated}.");
         }
 
 

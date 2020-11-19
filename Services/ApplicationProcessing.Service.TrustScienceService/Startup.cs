@@ -1,17 +1,12 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using ApplicationProcessing.Service.ScoringSolution.Repositories;
 using ApplicationProcessing.Service.TrustScienceService.DTOs.Configuration;
 using ApplicationProcessing.Service.TrustScienceService.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace ApplicationProcessing.Service.TrustScienceService
 {
@@ -31,7 +26,7 @@ namespace ApplicationProcessing.Service.TrustScienceService
         public void ConfigureServices(IServiceCollection services)
         {
             var config = new TrustScienceConfiguration();
-            Configuration.Bind("TrustScience", config);      //  Bind "TrustScienceConfiguration" Object to "TrustScienceSection" config section
+            Configuration.Bind("TrustScience", config);      //  Bind "TrustScienceConfiguration" Object to "TrustScience" config section
 
             // save the list of CORS sites to property.. 
             // easy to do it now when we have access to the config object (TrustScienceConfiguration)
