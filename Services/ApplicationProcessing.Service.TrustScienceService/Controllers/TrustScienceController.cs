@@ -46,8 +46,13 @@ namespace ApplicationProcessing.Service.TrustScienceService.Controllers
         {
             try
             {
-                await Task.FromResult(1);
-                return Ok("Execute");
+                // get application detail
+                var trustScienceBatchItem = await _trustScienceRepository.GetFullApplicationByID(appInfo.ApplicationID);
+
+                // create request data to match Trust Science format
+                var createFullScoringResp = await _trustScienceService.CreateFullScoringRequest(trustScienceBatchItem);
+
+                return Ok(trustScienceBatchItem);
             }
             catch (SqlException ex)
             {
