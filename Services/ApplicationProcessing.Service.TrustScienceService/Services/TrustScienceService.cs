@@ -60,12 +60,23 @@ namespace ApplicationProcessing.Service.TrustScienceService.Services
         // Proccess all submitted application that with out reports
         public async Task<int> FetchReportsFromTrustScience()
         {
+            var processingResult = new ProcessingResult();
+
+            // TODO: Set all the fields of processingResult
+
             // create list of all apps that needed report
             var appList = await _trustScienceRepository.GetListOfMissingReport();
 
-            foreach(var app in appList)
+            if (appList != null && appList.Count() > 0)
             {
-                await ReprocessScoringReport(app);
+                foreach (var app in appList)
+                {
+                    // TODO: must set step in [logs].[ApplicationFlowStepResult] to  IsCompleted
+                    await ReprocessScoringReport(app);
+                }
+
+                // save the summary in to [dbo].[TrustScienceScoreProcessingResult] table
+                await _trustScienceRepository.SaveProcessingInfo(processingResult);
             }
 
             return await Task.FromResult(1);

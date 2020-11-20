@@ -310,5 +310,34 @@ namespace ApplicationProcessing.Service.ScoringSolution.Repositories
                 //return await Task.FromResult(new SaveCreateFullScoringToTableResp());
             }
         }
+
+        public async void SaveProcessingInfo(ProcessingResult processingResult)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(_scoringDbConn))
+                {
+                    var queryParameters = new DynamicParameters();
+                    queryParameters.Add("@LastItemDateTime", processingResult.LastItemDateTime);
+                    queryParameters.Add("@TotalItemCount", processingResult.TotalItemCount);
+                    queryParameters.Add("@SuccessfulItemCount", processingResult.SuccessfulItemCount);
+                    queryParameters.Add("@FailedItemCount", processingResult.FailedItemCount);
+                    queryParameters.Add("@ProcessingErrorItemCount", processingResult.ProcessingErrorItemCount);
+                    queryParameters.Add("@StartDateTime", processingResult.StartDateTime);
+                    queryParameters.Add("@EndDateTime", processingResult.EndDateTime);
+
+                    await conn.ExecuteAsync(
+                                            "[trustScience].[SaveProcessingResult]", 
+                                            queryParameters, 
+                                            commandType: 
+                                            CommandType.StoredProcedure);
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
