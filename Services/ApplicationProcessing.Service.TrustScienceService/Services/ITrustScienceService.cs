@@ -13,5 +13,7 @@ namespace ApplicationProcessing.Service.TrustScienceService.Services
         Task<HttpGeneralResponse> CreateFullScoringRequest(TrustScienceBatchItem trustScienceBatchItem, ApplicationStepInput appInfo);
 
         Task<int> FetchReportsFromTrustScience();
+
+        Task<HttpGeneralResponse> GetScoringReportByRequestID(string requestID);
     }
 }

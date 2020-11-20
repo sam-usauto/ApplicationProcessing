@@ -2,6 +2,7 @@
 using ApplicationProcessing.Service.TrustScienceService.DTOs;
 using ApplicationProcessing.Service.TrustScienceService.DTOs.Configuration;
 using ApplicationProcessing.Service.TrustScienceService.DTOs.Request;
+using ApplicationProcessing.Service.TrustScienceService.DTOs.Responses;
 using Common.DTOs;
 using Common.DTOs.Application;
 using Newtonsoft.Json;
@@ -62,6 +63,11 @@ namespace ApplicationProcessing.Service.TrustScienceService.Services
             // create list of all apps that needed report
             var appList = await _trustScienceRepository.GetListOfMissingReport();
 
+            foreach(var app in appList)
+            {
+                await ReprocessScoringReport(app);
+            }
+
             return await Task.FromResult(1);
         }
 
@@ -77,6 +83,94 @@ namespace ApplicationProcessing.Service.TrustScienceService.Services
 
 
                 return trustScienceResp;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        // get selected report from Trust science
+        public async Task<HttpGeneralResponse> GetScoringReportByRequestID(string requestID)
+        {
+            try
+            {
+                var serviceURL = _trustScienceConfigsSettings.GetScoringReportUrl;
+                var apiKey = _trustScienceConfigsSettings.ApiKey;
+                // format url to contain the request ID
+                var formattedUrl = String.Format(serviceURL, requestID);
+
+                //HttpResponseMessage getResp;
+
+                var client = new HttpClient();
+                client.DefaultRequestHeaders.Add("x-api-key", apiKey);
+                client.DefaultRequestHeaders.Add("Accept", "*/*");
+                client.DefaultRequestHeaders.Add("Accept", "application/json");
+                client.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue
+                {
+                    NoCache = true
+                };
+
+                var httpGeneralResponse = new HttpGeneralResponse(formattedUrl, "Get");
+
+                try
+                {
+                    var result = await client.GetAsync(formattedUrl);
+                    string content = await result.Content.ReadAsStringAsync();
+                    httpGeneralResponse.RequestData = $"RequestId = {requestID}";
+                    httpGeneralResponse.ResponseData = content;
+                    httpGeneralResponse.IsSuccessStatusCode = result.IsSuccessStatusCode;
+                    httpGeneralResponse.ReasonPhrase = result.ReasonPhrase;
+                    httpGeneralResponse.StatusCode = (int)result.StatusCode;
+                    return httpGeneralResponse;
+                }
+                catch (Exception ex)
+                {
+                    httpGeneralResponse.Errors.Add(ex.Message);
+                    httpGeneralResponse.ResponseData = "Trust Science Get Scoring Report Request Failed!";
+                    return httpGeneralResponse;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        #region Private helper methods
+
+        private async Task<int> ReprocessScoringReport(ReportReq req)
+        {
+            try
+            {
+                try
+                {
+                    // get report for selected application from Trust Science web
+                    var getScoringReportResp = await GetScoringReportByRequestID(req.RequestId);
+
+                    var jsonResponse = getScoringReportResp.ResponseData;
+
+                    // check if we got an error
+                    if (getScoringReportResp.IsSuccessStatusCode)
+                    {
+                        var responseOk = JsonConvert.DeserializeObject<ScoringReportResp>(jsonResponse);
+                        // save respose data to log
+                        _trustScienceRepository.SaveGetScoringReportResp(req.RequestId, req.ID, jsonResponse, responseOk, "OK", -1);
+                        return 1;
+                    }
+                    else
+                    {
+                        var responseBad = JsonConvert.DeserializeObject<ScoringReportBadResponse>(jsonResponse);
+                        // save respose data to log
+                        _trustScienceRepository.SaveGetScoringReportResp(req.RequestId, req.ID, jsonResponse, new ScoringReportResp(), "Bad Request", -1);
+                        return 2;
+                    }
+                }
+                catch (Exception ex)
+                {
+                     throw ex; 
+                }
             }
             catch (Exception ex)
             {
@@ -138,8 +232,6 @@ namespace ApplicationProcessing.Service.TrustScienceService.Services
                 throw ex;
             }
         }
-
-        #region Private helper methods
 
         // remove all emply properties from the request
         private string JsonRemoveEmptyProperties(CreateFullScoringRequest reqData, TrustScienceBatchItem item)
@@ -423,8 +515,6 @@ namespace ApplicationProcessing.Service.TrustScienceService.Services
             }
             return "+1" + phone;
         }
-
-  
 
 
 

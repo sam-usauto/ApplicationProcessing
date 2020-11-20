@@ -35,6 +35,146 @@ namespace ApplicationProcessing.Service.ScoringSolution.Repositories
             }
         }
 
+        // save report req/resp to Trust Science log [dbo].[TrustScienceScore] table.
+        public async void SaveGetScoringReportResp(
+                                                string requestID, 
+                                                int logID, 
+                                                string getScoringReportJsonResp, 
+                                                ScoringReportResp scoringReportResp, 
+                                                string status, 
+                                                int ApplicationFlowStepResultID)
+        {
+            try
+            {
+                using (var conn = new SqlConnection(_scoringDbConn))
+                {
+                    var qualifierCode1 = "";
+                    var qualifierCodeDescription1 = "";
+                    var qualifierCode2 = "";
+                    var qualifierCodeDescription2 = "";
+                    var qualifierCode3 = "";
+                    var qualifierCodeDescription3 = "";
+                    var qualifierCode4 = "";
+                    var qualifierCodeDescription4 = "";
+
+                    var scoreReasonCode1 = "";
+                    var scoreReasonDescription1 = "";
+                    var scoreReasonCode2 = "";
+                    var scoreReasonDescription2 = "";
+                    var scoreReasonCode3 = "";
+                    var scoreReasonDescription3 = "";
+                    var scoreReasonCode4 = "";
+                    var scoreReasonDescription4 = "";
+
+                    // load the qualifier codes
+                    if (status == "OK")
+                    {
+                        var itemNum = 1;
+                        foreach (var qualifier in scoringReportResp.scoreQualifier)
+                        {
+                            if (itemNum == 1)
+                            {
+                                qualifierCode1 = qualifier.qualifierCode;
+                                qualifierCodeDescription1 = qualifier.qualifierDescription;
+                            }
+                            if (itemNum == 2)
+                            {
+                                qualifierCode2 = qualifier.qualifierCode;
+                                qualifierCodeDescription2 = qualifier.qualifierDescription;
+                            }
+                            if (itemNum == 3)
+                            {
+                                qualifierCode3 = qualifier.qualifierCode;
+                                qualifierCodeDescription3 = qualifier.qualifierDescription;
+                            }
+                            if (itemNum == 4)
+                            {
+                                qualifierCode4 = qualifier.qualifierCode;
+                                qualifierCodeDescription4 = qualifier.qualifierDescription;
+                            }
+
+                            itemNum++;
+                            if (itemNum > 4)
+                            {
+                                break;
+                            }
+
+                        }
+
+                        itemNum = 1;
+                        foreach (var scoreReason in scoringReportResp.scoreReasons)
+                        {
+                            if (itemNum == 1)
+                            {
+                                scoreReasonCode1 = scoreReason.code;
+                                scoreReasonDescription1 = scoreReason.description;
+                            }
+                            if (itemNum == 2)
+                            {
+                                scoreReasonCode2 = scoreReason.code;
+                                scoreReasonDescription2 = scoreReason.description;
+                            }
+                            if (itemNum == 3)
+                            {
+                                scoreReasonCode3 = scoreReason.code;
+                                scoreReasonDescription3 = scoreReason.description;
+                            }
+                            if (itemNum == 4)
+                            {
+                                scoreReasonCode4 = scoreReason.code;
+                                scoreReasonDescription4 = scoreReason.description;
+                            }
+
+                            itemNum++;
+                            if (itemNum > 4)
+                            {
+                                break;
+                            }
+                        }
+
+                    }
+
+                    var queryParameters = new DynamicParameters();
+                    queryParameters.Add("@LogID", logID);
+                    queryParameters.Add("@RequestID", requestID);
+                    queryParameters.Add("@Score", status == "OK" ? scoringReportResp.score : 0);
+                    queryParameters.Add("@QualifierCode1", qualifierCode1);
+                    queryParameters.Add("@QualifierCodeDescription1", qualifierCodeDescription1);
+                    queryParameters.Add("@QualifierCode2", qualifierCode2);
+                    queryParameters.Add("@QualifierCodeDescription2", qualifierCodeDescription2);
+                    queryParameters.Add("@QualifierCode3", qualifierCode3);
+                    queryParameters.Add("@QualifierCodeDescription3", qualifierCodeDescription3);
+                    queryParameters.Add("@QualifierCode4", qualifierCode4);
+                    queryParameters.Add("@QualifierCodeDescription4", qualifierCodeDescription4);
+
+                    queryParameters.Add("@ScoreReasonCode1", scoreReasonCode1);
+                    queryParameters.Add("@ScoreReasonDescription1", scoreReasonDescription1);
+                    queryParameters.Add("@ScoreReasonCode2", scoreReasonCode2);
+                    queryParameters.Add("@ScoreReasonDescription2", scoreReasonDescription2);
+                    queryParameters.Add("@ScoreReasonCode3", scoreReasonCode3);
+                    queryParameters.Add("@ScoreReasonDescription3", scoreReasonDescription3);
+                    queryParameters.Add("@ScoreReasonCode4", scoreReasonCode4);
+
+
+                    queryParameters.Add("@ScoringDetailsURL", status == "OK" ? scoringReportResp.appendix.links.scoringDetailsUrl : "");
+                    queryParameters.Add("@Response", getScoringReportJsonResp);
+                    queryParameters.Add("@CallStatus", status);
+
+                    await conn.ExecuteAsync(
+                                 "TrustScienceSaveGetScoringReportResp",
+                                 queryParameters,
+                                 commandType: CommandType.StoredProcedure);
+
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
         // get detail of application by creditScoreApplicationID
         public async Task<TrustScienceBatchItem> GetFullApplicationByID(int applicationID)
         {
@@ -82,7 +222,7 @@ namespace ApplicationProcessing.Service.ScoringSolution.Repositories
                 using (SqlConnection conn = new SqlConnection(_scoringDbConn))
                 {
                     var list = await conn.QueryAsync<ReportReq>(
-                                    "TrustScienceGetFailedBatchToReprocess", 
+                                    "[trustScience].[GetAppsToConvertToReports]", 
                                     new { }, 
                                     commandType: CommandType.StoredProcedure
                                     );

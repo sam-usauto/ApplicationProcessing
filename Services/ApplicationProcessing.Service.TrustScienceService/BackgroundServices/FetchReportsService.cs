@@ -39,17 +39,6 @@ namespace ApplicationProcessing.Service.TrustScienceService.BackgroundServices
                 await Task.Delay(TimeSpan.FromSeconds(_refreshIntervalInSeconds), stoppingToken);
 
                 var applist = await _trustScienceService.FetchReportsFromTrustScience();
-
-                //if (forecast is object)
-                //{
-                //    var currentWeather = new CurrentWeatherResult { Description = forecast.Weather.Description };
-
-                //    var cacheKey = $"current_weather_{DateTime.UtcNow:yyyy_MM_dd}";
-
-                //    _logger.LogInformation("Updating weather in cache.");
-
-                //    await _cache.SetAsync(cacheKey, currentWeather, _minutesToCache);
-                //}
             }
         }
     }
