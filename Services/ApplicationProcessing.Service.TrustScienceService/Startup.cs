@@ -1,5 +1,6 @@
 using System.Linq;
 using ApplicationProcessing.Service.ScoringSolution.Repositories;
+using ApplicationProcessing.Service.TrustScienceService.BackgroundServices;
 using ApplicationProcessing.Service.TrustScienceService.DTOs.Configuration;
 using ApplicationProcessing.Service.TrustScienceService.Services;
 using Microsoft.AspNetCore.Builder;
@@ -38,6 +39,8 @@ namespace ApplicationProcessing.Service.TrustScienceService
 
             services.AddTransient<ITrustScienceService, ApplicationProcessing.Service.TrustScienceService.Services.TrustScienceService>();
 
+            // register host service
+            services.AddHostedService<FetchReportsService>();
 
             services.AddControllers();
         }

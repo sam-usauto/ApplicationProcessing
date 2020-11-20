@@ -74,6 +74,27 @@ namespace ApplicationProcessing.Service.ScoringSolution.Repositories
             }
         }
 
+        // build list of all report needed to be saved into [dbo].[TrustScienceScore] log table
+        public async Task<IEnumerable<ReportReq>> GetListOfMissingReport()
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(_scoringDbConn))
+                {
+                    var list = await conn.QueryAsync<ReportReq>(
+                                    "TrustScienceGetFailedBatchToReprocess", 
+                                    new { }, 
+                                    commandType: CommandType.StoredProcedure
+                                    );
+                    return list;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public async Task MarkStepAsCompleted(ApplicationStepInput appInfo)
         {
             try

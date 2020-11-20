@@ -11,5 +11,7 @@ namespace ApplicationProcessing.Service.TrustScienceService.Services
     public interface ITrustScienceService
     {
         Task<HttpGeneralResponse> CreateFullScoringRequest(TrustScienceBatchItem trustScienceBatchItem, ApplicationStepInput appInfo);
+
+        Task<int> FetchReportsFromTrustScience();
     }
 }

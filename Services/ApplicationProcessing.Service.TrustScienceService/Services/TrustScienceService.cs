@@ -1,4 +1,5 @@
-﻿using ApplicationProcessing.Service.TrustScienceService.DTOs;
+﻿using ApplicationProcessing.Service.ScoringSolution.Repositories;
+using ApplicationProcessing.Service.TrustScienceService.DTOs;
 using ApplicationProcessing.Service.TrustScienceService.DTOs.Configuration;
 using ApplicationProcessing.Service.TrustScienceService.DTOs.Request;
 using Common.DTOs;
@@ -18,15 +19,17 @@ namespace ApplicationProcessing.Service.TrustScienceService.Services
     public class TrustScienceService : ITrustScienceService
     {
         //private IConfiguration _config;
-        public TrustScienceConfiguration _config;
-        public TrustScienceSection _trustScienceConfigsSettings;
-        string _scoringDbConn = string.Empty;
-        string _currentToken = string.Empty;   // token is valid for over a day
-        bool _production = false;
+        private readonly TrustScienceConfiguration _config;
+        private readonly TrustScienceSection _trustScienceConfigsSettings;
+        private readonly ITrustScienceRepository _trustScienceRepository;
+        private readonly string _scoringDbConn = string.Empty;
+        private readonly bool _production = false;
 
-        public TrustScienceService(TrustScienceConfiguration config)
+        public TrustScienceService(TrustScienceConfiguration config, ITrustScienceRepository trustScienceRepository)
         {
             _config = config;
+
+            _trustScienceRepository = trustScienceRepository;
 
             // Is Production... read from appSettings.json
             _production = _config.IsProduction;
@@ -52,6 +55,16 @@ namespace ApplicationProcessing.Service.TrustScienceService.Services
             }
         }
 
+
+        // Proccess all submitted application that with out reports
+        public async Task<int> FetchReportsFromTrustScience()
+        {
+            // create list of all apps that needed report
+            var appList = await _trustScienceRepository.GetListOfMissingReport();
+
+            return await Task.FromResult(1);
+        }
+
         public async Task<HttpGeneralResponse> CreateFullScoringRequest(TrustScienceBatchItem item, ApplicationStepInput appInfo)
         {
             try
@@ -70,7 +83,6 @@ namespace ApplicationProcessing.Service.TrustScienceService.Services
                 throw ex;
             }
         }
-
 
         // Post Full Scoring request
         // remove all fields with no values
@@ -128,6 +140,7 @@ namespace ApplicationProcessing.Service.TrustScienceService.Services
         }
 
         #region Private helper methods
+
         // remove all emply properties from the request
         private string JsonRemoveEmptyProperties(CreateFullScoringRequest reqData, TrustScienceBatchItem item)
         {
@@ -410,6 +423,8 @@ namespace ApplicationProcessing.Service.TrustScienceService.Services
             }
             return "+1" + phone;
         }
+
+  
 
 
 
