@@ -20,5 +20,8 @@ namespace ApplicationProcessing.Service.TrustScienceService.DTOs.Configuration
 
         public string SsnDecryptUrl { get; set; }
         public string SsnEncryptUrl { get; set; }
+
+        public int FetchReportsServiceIntervalInSeconds { get; set; }
+        
     }
 }

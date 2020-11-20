@@ -156,15 +156,15 @@ namespace ApplicationProcessing.Service.TrustScienceService.Services
                     {
                         var responseOk = JsonConvert.DeserializeObject<ScoringReportResp>(jsonResponse);
                         // save respose data to log
-                        _trustScienceRepository.SaveGetScoringReportResp(req.RequestId, req.ID, jsonResponse, responseOk, "OK", -1);
+                        _trustScienceRepository.SaveGetScoringReportResp(req.RequestId, req.ID, jsonResponse, responseOk, "OK");
                         return 1;
                     }
                     else
                     {
                         var responseBad = JsonConvert.DeserializeObject<ScoringReportBadResponse>(jsonResponse);
                         // save respose data to log
-                        _trustScienceRepository.SaveGetScoringReportResp(req.RequestId, req.ID, jsonResponse, new ScoringReportResp(), "Bad Request", -1);
-                        return 2;
+                        _trustScienceRepository.SaveGetScoringReportResp(req.RequestId, req.ID, jsonResponse, new ScoringReportResp(), "Bad Request");
+                        return -1;
                     }
                 }
                 catch (Exception ex)

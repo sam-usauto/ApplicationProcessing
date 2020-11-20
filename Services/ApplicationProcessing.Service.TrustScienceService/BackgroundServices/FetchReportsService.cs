@@ -19,7 +19,7 @@ namespace ApplicationProcessing.Service.TrustScienceService.BackgroundServices
 
         private ApplicationStepInput _applicationStepInput = null;
         private int _dapperTimeOut = 90;
-        private readonly int _refreshIntervalInSeconds;
+        private readonly int _serviceIntervalInSeconds;
 
         public FetchReportsService(TrustScienceConfiguration config,
                                     ITrustScienceRepository trustScienceRepository,
@@ -29,14 +29,14 @@ namespace ApplicationProcessing.Service.TrustScienceService.BackgroundServices
             _trustScienceService = trustScienceService;
             _dapperTimeOut = _config.DapperDefaultTimeOut;
             _trustScienceRepository = trustScienceRepository;
-            _refreshIntervalInSeconds =  60;
+            _serviceIntervalInSeconds = config.FetchReportsServiceIntervalInSeconds;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                await Task.Delay(TimeSpan.FromSeconds(_refreshIntervalInSeconds), stoppingToken);
+                await Task.Delay(TimeSpan.FromSeconds(_serviceIntervalInSeconds), stoppingToken);
 
                 var applist = await _trustScienceService.FetchReportsFromTrustScience();
             }

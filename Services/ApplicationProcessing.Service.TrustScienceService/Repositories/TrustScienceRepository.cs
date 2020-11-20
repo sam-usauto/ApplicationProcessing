@@ -41,8 +41,7 @@ namespace ApplicationProcessing.Service.ScoringSolution.Repositories
                                                 int logID, 
                                                 string getScoringReportJsonResp, 
                                                 ScoringReportResp scoringReportResp, 
-                                                string status, 
-                                                int ApplicationFlowStepResultID)
+                                                string status)
         {
             try
             {
@@ -154,14 +153,14 @@ namespace ApplicationProcessing.Service.ScoringSolution.Repositories
                     queryParameters.Add("@ScoreReasonCode3", scoreReasonCode3);
                     queryParameters.Add("@ScoreReasonDescription3", scoreReasonDescription3);
                     queryParameters.Add("@ScoreReasonCode4", scoreReasonCode4);
-
+                    queryParameters.Add("@ScoreReasonDescription4", scoreReasonDescription4);
 
                     queryParameters.Add("@ScoringDetailsURL", status == "OK" ? scoringReportResp.appendix.links.scoringDetailsUrl : "");
                     queryParameters.Add("@Response", getScoringReportJsonResp);
                     queryParameters.Add("@CallStatus", status);
 
                     await conn.ExecuteAsync(
-                                 "TrustScienceSaveGetScoringReportResp",
+                                 "[trustScience].[SaveGetReportRespone]",
                                  queryParameters,
                                  commandType: CommandType.StoredProcedure);
 
@@ -173,7 +172,6 @@ namespace ApplicationProcessing.Service.ScoringSolution.Repositories
                 throw ex;
             }
         }
-
 
         // get detail of application by creditScoreApplicationID
         public async Task<TrustScienceBatchItem> GetFullApplicationByID(int applicationID)
@@ -219,6 +217,7 @@ namespace ApplicationProcessing.Service.ScoringSolution.Repositories
         {
             try
             {
+                // TODO: Change the SP to limit the number of trying the same report
                 using (SqlConnection conn = new SqlConnection(_scoringDbConn))
                 {
                     var list = await conn.QueryAsync<ReportReq>(

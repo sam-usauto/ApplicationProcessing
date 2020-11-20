@@ -15,7 +15,7 @@ namespace ApplicationProcessing.Service.ScoringSolution.Repositories
         Task<SaveCreateFullScoringToTableResp> SaveFullScroingInfo(TrustScienceScore trustScienceScore);
         Task MarkStepAsCompleted(ApplicationStepInput appInfo);
         Task<IEnumerable<ReportReq>> GetListOfMissingReport();
-        void SaveGetScoringReportResp(string requestID, int logID, string getScoringReportJsonResp, ScoringReportResp scoringReportResp, string status, int ApplicationFlowStepResultID);
+        void SaveGetScoringReportResp(string requestID, int logID, string getScoringReportJsonResp, ScoringReportResp scoringReportResp, string status);
 
     }
 }
