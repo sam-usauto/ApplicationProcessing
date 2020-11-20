@@ -1,5 +1,6 @@
 ﻿using ApplicationProcessing.Service.TrustScienceService.DTOs;
 using ApplicationProcessing.Service.TrustScienceService.DTOs.Configuration;
+using ApplicationProcessing.Service.TrustScienceService.DTOs.Responses;
 using Common.DTOs.Application;
 using Dapper;
 using System;
@@ -33,7 +34,6 @@ namespace ApplicationProcessing.Service.ScoringSolution.Repositories
                 _scoringDbConn = _config.ConnectionStringsUAT.scoringDb;
             }
         }
-
 
         // get detail of application by creditScoreApplicationID
         public async Task<TrustScienceBatchItem> GetFullApplicationByID(int applicationID)
@@ -74,6 +74,27 @@ namespace ApplicationProcessing.Service.ScoringSolution.Repositories
             }
         }
 
+        public async Task MarkStepAsCompleted(ApplicationStepInput appInfo)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(_scoringDbConn))
+                {
+                    var queryParameters = new DynamicParameters();
+                    queryParameters.Add("@ApplicationFlowStepResultID", appInfo.ApplicationFlowStepResultID);
+
+                    var result = await conn.ExecuteAsync(
+                                    "[logs].[MarkStepAsCompleted]",
+                                    queryParameters,
+                                    commandType: CommandType.StoredProcedure);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public async Task ReqSaveRespToLog(string req, string resp, ApplicationStepInput appInfo, int which = 1)
         {
             try
@@ -97,6 +118,37 @@ namespace ApplicationProcessing.Service.ScoringSolution.Repositories
                 throw ex;
             }
 
+        }
+
+        public async Task<SaveCreateFullScoringToTableResp> SaveFullScroingInfo(TrustScienceScore trustScienceScore)
+        {
+            try
+            {
+                using (var conn = new SqlConnection(_scoringDbConn))
+                {
+                    var queryParameters = new DynamicParameters();
+                    queryParameters.Add("@CustomerID", trustScienceScore.CustomerID);
+                    queryParameters.Add("@ApplicationID", trustScienceScore.ApplicationID);
+                    queryParameters.Add("@Request", trustScienceScore.Request);
+                    queryParameters.Add("@Response", trustScienceScore.Response);
+                    queryParameters.Add("@CallStatus", trustScienceScore.CallStatus);
+                    queryParameters.Add("@RequestID", trustScienceScore.RequestID);
+
+                    var insertedId = await conn.QueryFirstAsync<int>(
+                                 "[trustScience].[SaveCreateFullScoringReqResp]",
+                                 queryParameters,
+                                 commandType: CommandType.StoredProcedure);
+
+                    var resp = new SaveCreateFullScoringToTableResp();
+                    resp.LogID = insertedId;        // save Trust Science log ID
+                    return await Task.FromResult(resp);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+                //return await Task.FromResult(new SaveCreateFullScoringToTableResp());
+            }
         }
     }
 }

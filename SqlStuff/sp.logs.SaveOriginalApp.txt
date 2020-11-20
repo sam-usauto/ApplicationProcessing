@@ -1,4 +1,7 @@
-﻿SET ANSI_NULLS ON
+﻿USE [ScoringDBProd_Dev_Sam]
+GO
+/****** Object:  StoredProcedure [logs].[SaveOriginalApp]    Script Date: 11/19/2020 1:05:49 PM ******/
+SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
@@ -22,6 +25,11 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
+	DECLARE @ClientApplicationId int = -1, @ApplicationFlowId int = -1;
+	DECLARE @IdentityOutput TABLE ( ID int );
+
+	SELECT @ApplicationFlowId = Id FROM [dbo].[ApplicationFlow] WHERE [IsActive] = 1;
+
 	INSERT INTO [logs].[ClientApplication]
 		 (
 			[FirstName]
@@ -30,8 +38,9 @@ BEGIN
            ,[Email]
            ,[Last4Ssn]
            ,[OriginalApp]
+		   ,ApplicationFlowId
 		 )
-		 OUTPUT Inserted.Id
+		 OUTPUT inserted.Id INTO @IdentityOutput
 	VALUES
 		 (
 			@FirstName
@@ -40,7 +49,29 @@ BEGIN
            ,@Email
            ,@Last4Ssn
            ,@OriginalApp
-		 )
+		   ,@ApplicationFlowId
+		 );
 
-		
+	-- return the [logs].[ClientApplication] last inserted Identity
+	SELECT @ClientApplicationId = (SELECT ID FROM @IdentityOutput);
+
+	-- load current flow steps into ApplicationFlowStep
+	INSERT INTO [logs].[ApplicationFlowStepResult]
+	SELECT 
+			 @ClientApplicationId
+			,[Id]
+			,0 
+			,[StepOrder]
+			,NULL			-- all nulls are respone and request data
+			,NULL
+			,NULL
+			,NULL
+			,GETDATE()
+		 FROM
+			[dbo].[ApplicationFlowStep]
+		 WHERE 
+			[ApplicationFlowId] = @ApplicationFlowId;
+
+	SELECT @ClientApplicationId;
+
 END

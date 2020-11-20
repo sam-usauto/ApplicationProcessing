@@ -10,6 +10,7 @@ namespace ApplicationWorkerDataLayer.Interfaces
         Task<int> SaveClientOriginalApplication(string firstName, string lastName, string phoneNumber, string email, string ssn, string appJson);
         Task<ClientApplicationLogIds> SaveApplicationToDB( (ShortApp application, int logId, int userID, int lotID) applicationAndLog );
         Task<IEnumerable<ApplicationFlowStep>> GetApplicationFlowSteps(int logID);
+        Task<SaveCreateFullScoringToTableResp> SaveFullScroingInfo(TrustScienceScore trustScienceScore);
 
         //Task<HttpGeneralResponse> CreateFullScoringRequest(TrustScienceBatchItem trustScienceBatchItem);
         //Task<HttpGeneralResponse> GetScoringReport(string id);

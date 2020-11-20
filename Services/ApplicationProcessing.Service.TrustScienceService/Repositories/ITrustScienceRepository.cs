@@ -1,4 +1,5 @@
 ﻿using ApplicationProcessing.Service.TrustScienceService.DTOs;
+using ApplicationProcessing.Service.TrustScienceService.DTOs.Responses;
 using Common.DTOs.Application;
 using System;
 using System.Collections.Generic;
@@ -11,5 +12,7 @@ namespace ApplicationProcessing.Service.ScoringSolution.Repositories
     {
         Task<TrustScienceBatchItem> GetFullApplicationByID(int creditScoreApplicationID);
         Task ReqSaveRespToLog(string req, string resp, ApplicationStepInput appInfo, int which = 1);
+        Task<SaveCreateFullScoringToTableResp> SaveFullScroingInfo(TrustScienceScore trustScienceScore);
+        Task MarkStepAsCompleted(ApplicationStepInput appInfo);
     }
 }
