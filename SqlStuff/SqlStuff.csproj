@@ -42,6 +42,7 @@
     <Content Include="Sql code.txt" />
     <Content Include="StoredPooceduresScripts 11-20-2020 - 2.sql" />
     <Content Include="StoredPooceduresScripts 11-20-2020.sql" />
+    <Content Include="StoredPooceduresScripts 11-21-2020.sql" />
     <Content Include="table.Create.ShortApp.txt" />
     <Content Include="sp.logs.SaveOriginalApp.txt" />
     <Content Include="TestingCommands.txt" />

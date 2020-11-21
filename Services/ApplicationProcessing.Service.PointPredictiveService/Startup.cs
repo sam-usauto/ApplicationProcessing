@@ -1,6 +1,3 @@
-//using ApplicationWorkerDataLayer.Interfaces;
-//using ApplicationWorkerDataLayer.Repositories;
-//using Common.DTOs.Configurations;
 using ApplicationProcessing.Service.PointPredictiveService.DTOs;
 using ApplicationProcessing.Service.PointPredictiveService.Repositories;
 using ApplicationProcessing.Service.PointPredictiveService.Services;

@@ -85,8 +85,10 @@ namespace ApplicationProcessing.Service.PointPredictiveService.Controllers
                     user_defined_fields = applicationInput.UserDefinedFields
                 };
 
+                // call Point Predictive Web API with application information
                 PointPredictiveReportResp pointPredictiveReportResp = await _pointPredictiveService.GetPointPredictiveScoreAsync(pointPredictiveScoreReq);
 
+                // TODO: Not sure the code below is needed
                 // the request after cleaning emply fields
                 var cleanReq = _pointPredictiveService.JsonRemoveEmptyProperties(pointPredictiveScoreReq).Replace("'", "''");
 
@@ -109,41 +111,6 @@ namespace ApplicationProcessing.Service.PointPredictiveService.Controllers
                     return Ok(shortResp);
                 }
 
-                //// get the PP status to be diplayed to the user
-                //var pointPredictiveLastScore = await _ppService.GetPointPredictiveLastScoreAsync(creditId);
-
-                //// TODO
-                //// Test if reponse contains errors
-
-                //// load PP status info
-                //pointPredictiveReportResp.PointPredictiveScoreResp.UWStatusId = pointPredictiveLastScore.UWStatusId;
-                //pointPredictiveReportResp.PointPredictiveScoreResp.Status = pointPredictiveLastScore.Status;
-                //pointPredictiveReportResp.PointPredictiveScoreResp.DaysSinceLastCall = pointPredictiveLastScore.DaysSinceLastCall;
-
-                //// save the entry GUID for easy access on the screen
-                //pointPredictiveReportResp.SavedReqRespID = saveResp.NewSaveId;
-                //// save the score for easy access on the screen
-                //pointPredictiveReportResp.FraudScore =
-                //        pointPredictiveReportResp.PointPredictiveScoreResp.Application_fraud_information.fraud_score;
-
-                //// send short response
-                //var shortPointPredictiveReportResp = MapRespToShortResp(pointPredictiveReportResp);
-
-
-                ////Response.Headers.Add("access-control-allow-origin", "*");
-
-                //if (_underwritingConfiguration.ReturnShortResp == true)
-                //{
-                //    // return short results
-                //    return Ok(shortPointPredictiveReportResp);
-                //}
-                //else
-                //{
-                //    // return full results
-                //    return Ok(pointPredictiveReportResp);
-                //}
-
-
             return Ok(saveResp);
             }
             catch (SqlException ex)
@@ -162,7 +129,6 @@ namespace ApplicationProcessing.Service.PointPredictiveService.Controllers
 
         [HttpGet]
         [Route("Info")]
-        //public async Task<HttpResponseMessage> Execute([FromBody] (int applicationID, int logId, int userID) appInfo )
         public IActionResult Info()
         {
             return Ok($"Point Predictive Service - Version: {_version} Last Updated On: {_lastUpdated}.");

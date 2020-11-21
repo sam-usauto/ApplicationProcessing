@@ -92,7 +92,7 @@ namespace ApplicationProcessing.Service.PointPredictiveService.Repositories
                     reqString = JsonConvert.SerializeObject(pointPredictiveScoreReq, Formatting.Indented);
 
 
-                    // todo:  fix the issue
+                    // TODO:  fix the issue
                     //// decrypt SSN
                     //var ssnResp = usAutoApp..ss.SsnRespone;
                     //// Only show last 4 digits of ssn
@@ -188,7 +188,7 @@ namespace ApplicationProcessing.Service.PointPredictiveService.Repositories
                         queryParameters.Add("@Comment", comment);
 
                         var insertedId = await conn.QueryFirstAsync<int>(
-                             "PointPredictiveSaveReqResp",
+                             "[pointPredictive].[SaveReqResp]",
                              queryParameters,
                              commandType: CommandType.StoredProcedure);
 
