@@ -60,13 +60,24 @@ namespace ApplicationProcessing.Service.PointPredictiveService.Controllers
                     return BadRequest("Failed collecting application information by applicationId");
                 }
 
-                // call the SSN decryption
-                if (String.IsNullOrEmpty(app.SSN) == false)
+
+                if (String.IsNullOrEmpty(appInfo.ProtectedSsn))
                 {
-                    var ssnResp = await _ssnNumberService.UnprotectSsn(app.SSN);
-                    var unprotectedSsn = ssnResp.ResponseData;
-                    app.SSN = unprotectedSsn;
+                    // call the SSN decryption
+                    if (String.IsNullOrEmpty(app.SSN) == false)
+                    {
+                        var ssnResp = await _ssnNumberService.UnprotectSsn(app.SSN);
+                        var unprotectedSsn = ssnResp.ResponseData;
+                        app.SSN = unprotectedSsn;
+                    }
                 }
+                else
+                {
+                    // get the SSN from appInfo which was passed as a parameter
+                    app.SSN = appInfo.UnprotectedSsn;
+                }
+
+
 
                 // make sure data is clean
                 CleanApp(app);

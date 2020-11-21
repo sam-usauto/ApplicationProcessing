@@ -72,7 +72,6 @@ namespace ApplicationProcessing.Service.TrustScienceService.Controllers
                 trustScienceScore.ApplicationID = trustScienceBatchItem.clientApplicationId;
 
 
-
                 // get the response data from the call
                 var jsonResponse = createFullScoringResp.ResponseData;
 

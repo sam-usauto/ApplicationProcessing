@@ -1,3 +1,4 @@
+using ApplicationProcessing.Service.ScoringSolution.DTOs.Configuration;
 using ApplicationWorkerDataLayer.Interfaces;
 using ApplicationWorkerDataLayer.Repositories;
 using Common.DTOs.Configurations;
@@ -24,7 +25,7 @@ namespace ScorringSolutionMicroService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var config = new ScoringSolutionConfig();
+            var config = new ScoringSolutionConfiguration();
             Configuration.Bind("ScoringSolution", config);      //  Bind "ScoringSolutionConfig" Object to "ScoringSolution" config section
 
             // save the list of CORS sites to property.. 
