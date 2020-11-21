@@ -311,6 +311,7 @@ namespace ApplicationProcessing.Service.ScoringSolution.Repositories
             }
         }
 
+
         public async void SaveProcessingInfo(ProcessingResult processingResult)
         {
             try
@@ -339,5 +340,7 @@ namespace ApplicationProcessing.Service.ScoringSolution.Repositories
                 throw ex;
             }
         }
+
+
     }
 }

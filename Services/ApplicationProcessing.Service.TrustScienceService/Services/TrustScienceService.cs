@@ -63,20 +63,41 @@ namespace ApplicationProcessing.Service.TrustScienceService.Services
             var processingResult = new ProcessingResult();
 
             // TODO: Set all the fields of processingResult
+            processingResult.StartDateTime = DateTime.Now;
 
             // create list of all apps that needed report
             var appList = await _trustScienceRepository.GetListOfMissingReport();
+
+            processingResult.TotalItemCount = appList.Count();
 
             if (appList != null && appList.Count() > 0)
             {
                 foreach (var app in appList)
                 {
                     // TODO: must set step in [logs].[ApplicationFlowStepResult] to  IsCompleted
-                    await ReprocessScoringReport(app);
+                    var returnResult = await ReprocessScoringReport(app);
+                    try
+                    {
+                        if (returnResult == 1)
+                        {
+                            processingResult.SuccessfulItemCount++;
+                        }
+                        else
+                        {
+                            processingResult.FailedItemCount++;
+                        }
+
+                        processingResult.LastItemDateTime = processingResult.StartDateTime;
+                    }
+                    catch (Exception ex)
+                    {
+                        processingResult.ProcessingErrorItemCount++;
+                    }
                 }
 
+                processingResult.EndDateTime = DateTime.Now;
                 // save the summary in to [dbo].[TrustScienceScoreProcessingResult] table
-                await _trustScienceRepository.SaveProcessingInfo(processingResult);
+                await Task.Run(() => _trustScienceRepository.SaveProcessingInfo(processingResult));
             }
 
             return await Task.FromResult(1);

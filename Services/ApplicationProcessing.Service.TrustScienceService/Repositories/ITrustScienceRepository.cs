@@ -16,7 +16,7 @@ namespace ApplicationProcessing.Service.ScoringSolution.Repositories
         Task MarkStepAsCompleted(ApplicationStepInput appInfo);
         Task<IEnumerable<ReportReq>> GetListOfMissingReport();
         void SaveGetScoringReportResp(string requestID, int logID, string getScoringReportJsonResp, ScoringReportResp scoringReportResp, string status);
-        Task SaveProcessingInfo(ProcessingResult processingResult);
+        void SaveProcessingInfo(ProcessingResult processingResult);
 
     }
 }
