@@ -25,15 +25,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Files", "Files\Files.csproj
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{63DD62DF-5F67-4356-BF28-C0D799697A6B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApplicationProcessing.Service.ScoringSolution", "..\ApplicationProcessinServices\ApplicationProcessing.Service.ScoringSolution\ApplicationProcessing.Service.ScoringSolution.csproj", "{A943B164-B21A-434A-8824-DAF5C7EF83A5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApplicationProcessing.Service.TrustScienceService", "Services\ApplicationProcessing.Service.TrustScienceService\ApplicationProcessing.Service.TrustScienceService.csproj", "{F2BA6E58-B103-4EE9-92D5-F7DF68951AE2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApplicationProcessing.Service.TrustScienceService", "Services\ApplicationProcessing.Service.TrustScienceService\ApplicationProcessing.Service.TrustScienceService.csproj", "{F2BA6E58-B103-4EE9-92D5-F7DF68951AE2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApplicationProcessing.Service.PointPredictiveService", "Services\ApplicationProcessing.Service.PointPredictiveService\ApplicationProcessing.Service.PointPredictiveService.csproj", "{BF834155-DED4-43E3-9043-89EB7E5616F3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApplicationProcessing.Service.PointPredictiveService", "Services\ApplicationProcessing.Service.PointPredictiveService\ApplicationProcessing.Service.PointPredictiveService.csproj", "{BF834155-DED4-43E3-9043-89EB7E5616F3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApplicationProcessing.Service.Email", "Services\ApplicationProcessing.Service.Email\ApplicationProcessing.Service.Email.csproj", "{3F0226D1-6982-4850-B6BA-21BE410591D3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApplicationProcessing.Service.Email", "Services\ApplicationProcessing.Service.Email\ApplicationProcessing.Service.Email.csproj", "{3F0226D1-6982-4850-B6BA-21BE410591D3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApplicationProcessing.Service.Logging", "Services\ApplicationProcessing.Service.Logging\ApplicationProcessing.Service.Logging.csproj", "{4EE0A317-7BD9-452F-9385-7605BCF503D1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApplicationProcessing.Service.Logging", "Services\ApplicationProcessing.Service.Logging\ApplicationProcessing.Service.Logging.csproj", "{4EE0A317-7BD9-452F-9385-7605BCF503D1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApplicationProcessing.Service.ScoringSolution", "Services\ApplicationProcessing.Service.ScoringSolution\ApplicationProcessing.Service.ScoringSolution.csproj", "{10732CD0-9DB2-42B0-B472-7EC4363729FD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -81,10 +81,6 @@ Global
 		{5BAA9E6F-CA3E-469B-B3C3-3C51664CA67D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5BAA9E6F-CA3E-469B-B3C3-3C51664CA67D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5BAA9E6F-CA3E-469B-B3C3-3C51664CA67D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A943B164-B21A-434A-8824-DAF5C7EF83A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A943B164-B21A-434A-8824-DAF5C7EF83A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A943B164-B21A-434A-8824-DAF5C7EF83A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A943B164-B21A-434A-8824-DAF5C7EF83A5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F2BA6E58-B103-4EE9-92D5-F7DF68951AE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F2BA6E58-B103-4EE9-92D5-F7DF68951AE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F2BA6E58-B103-4EE9-92D5-F7DF68951AE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -101,16 +97,20 @@ Global
 		{4EE0A317-7BD9-452F-9385-7605BCF503D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4EE0A317-7BD9-452F-9385-7605BCF503D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4EE0A317-7BD9-452F-9385-7605BCF503D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10732CD0-9DB2-42B0-B472-7EC4363729FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10732CD0-9DB2-42B0-B472-7EC4363729FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10732CD0-9DB2-42B0-B472-7EC4363729FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10732CD0-9DB2-42B0-B472-7EC4363729FD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{A943B164-B21A-434A-8824-DAF5C7EF83A5} = {63DD62DF-5F67-4356-BF28-C0D799697A6B}
 		{F2BA6E58-B103-4EE9-92D5-F7DF68951AE2} = {63DD62DF-5F67-4356-BF28-C0D799697A6B}
 		{BF834155-DED4-43E3-9043-89EB7E5616F3} = {63DD62DF-5F67-4356-BF28-C0D799697A6B}
 		{3F0226D1-6982-4850-B6BA-21BE410591D3} = {63DD62DF-5F67-4356-BF28-C0D799697A6B}
 		{4EE0A317-7BD9-452F-9385-7605BCF503D1} = {63DD62DF-5F67-4356-BF28-C0D799697A6B}
+		{10732CD0-9DB2-42B0-B472-7EC4363729FD} = {63DD62DF-5F67-4356-BF28-C0D799697A6B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {14B82291-443C-429F-AD6C-8725EE869B07}
